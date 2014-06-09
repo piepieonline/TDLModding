@@ -1,0 +1,46 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TDLHookLib", "TDLHookLib\TDLHookLib.csproj", "{1792FE88-DA77-490C-BCF6-812DF28BF00C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EntitySerialization", "EntitySerialization\EntitySerialization.csproj", "{45F29366-0921-4B59-9233-929F62E104CD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HookTester", "HookTester\HookTester.csproj", "{0EE63D91-AC58-4F48-9406-33019D38141D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TDLModdingTools", "TDLModdingTools\TDLModdingTools.csproj", "{D5B78E8C-12A2-4A1A-892C-E9DEBEF2D5EF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HookSim", "HookSim\HookSim.csproj", "{FC495211-25AF-44F8-A759-1D74ABB72678}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1792FE88-DA77-490C-BCF6-812DF28BF00C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1792FE88-DA77-490C-BCF6-812DF28BF00C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1792FE88-DA77-490C-BCF6-812DF28BF00C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1792FE88-DA77-490C-BCF6-812DF28BF00C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{45F29366-0921-4B59-9233-929F62E104CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{45F29366-0921-4B59-9233-929F62E104CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{45F29366-0921-4B59-9233-929F62E104CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{45F29366-0921-4B59-9233-929F62E104CD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0EE63D91-AC58-4F48-9406-33019D38141D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0EE63D91-AC58-4F48-9406-33019D38141D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0EE63D91-AC58-4F48-9406-33019D38141D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0EE63D91-AC58-4F48-9406-33019D38141D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D5B78E8C-12A2-4A1A-892C-E9DEBEF2D5EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5B78E8C-12A2-4A1A-892C-E9DEBEF2D5EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5B78E8C-12A2-4A1A-892C-E9DEBEF2D5EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5B78E8C-12A2-4A1A-892C-E9DEBEF2D5EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC495211-25AF-44F8-A759-1D74ABB72678}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC495211-25AF-44F8-A759-1D74ABB72678}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC495211-25AF-44F8-A759-1D74ABB72678}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC495211-25AF-44F8-A759-1D74ABB72678}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

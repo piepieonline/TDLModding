@@ -1,0 +1,9 @@
+d:\user\documents\visual studio 2013\Projects\TDLHookLib\TDLHookLib\bin\Debug\TDLHookLib.dll
+d:\user\documents\visual studio 2013\Projects\TDLHookLib\TDLHookLib\bin\Debug\TDLHookLib.pdb
+d:\user\documents\visual studio 2013\Projects\TDLHookLib\TDLHookLib\obj\Debug\TDLHookLib.dll
+d:\user\documents\visual studio 2013\Projects\TDLHookLib\TDLHookLib\obj\Debug\TDLHookLib.pdb
+d:\user\documents\visual studio 2013\Projects\TDLHookLib\TDLHookLib\obj\Debug\TDLHookLib.csprojResolveAssemblyReference.cache
+D:\Game Modding\TDL\TDLModding\TDLHookLib\bin\Debug\TDLHookLib.dll
+D:\Game Modding\TDL\TDLModding\TDLHookLib\bin\Debug\TDLHookLib.pdb
+D:\Game Modding\TDL\TDLModding\TDLHookLib\obj\Debug\TDLHookLib.dll
+D:\Game Modding\TDL\TDLModding\TDLHookLib\obj\Debug\TDLHookLib.pdb

@@ -1,0 +1,10 @@
+d:\user\documents\visual studio 2013\Projects\TDLHookLib\ConsoleApplication1\bin\Debug\ConsoleApplication1.exe.config
+d:\user\documents\visual studio 2013\Projects\TDLHookLib\ConsoleApplication1\bin\Debug\ConsoleApplication1.exe
+d:\user\documents\visual studio 2013\Projects\TDLHookLib\ConsoleApplication1\bin\Debug\ConsoleApplication1.pdb
+d:\user\documents\visual studio 2013\Projects\TDLHookLib\ConsoleApplication1\obj\Debug\ConsoleApplication1.exe
+d:\user\documents\visual studio 2013\Projects\TDLHookLib\ConsoleApplication1\obj\Debug\ConsoleApplication1.pdb
+D:\Game Modding\TDL\TDLModding\HookSim\bin\Debug\ConsoleApplication1.exe.config
+D:\Game Modding\TDL\TDLModding\HookSim\bin\Debug\ConsoleApplication1.exe
+D:\Game Modding\TDL\TDLModding\HookSim\bin\Debug\ConsoleApplication1.pdb
+D:\Game Modding\TDL\TDLModding\HookSim\obj\Debug\ConsoleApplication1.exe
+D:\Game Modding\TDL\TDLModding\HookSim\obj\Debug\ConsoleApplication1.pdb

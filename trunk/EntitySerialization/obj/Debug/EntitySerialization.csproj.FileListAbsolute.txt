@@ -1,0 +1,6 @@
+D:\User\Documents\Visual Studio 2013\Projects\TDLHookLib\EntitySerialization\bin\Debug\EntitySerialization.exe.config
+D:\User\Documents\Visual Studio 2013\Projects\TDLHookLib\EntitySerialization\bin\Debug\EntitySerialization.exe
+D:\User\Documents\Visual Studio 2013\Projects\TDLHookLib\EntitySerialization\bin\Debug\EntitySerialization.pdb
+D:\User\Documents\Visual Studio 2013\Projects\TDLHookLib\EntitySerialization\obj\Debug\EntitySerialization.csprojResolveAssemblyReference.cache
+D:\User\Documents\Visual Studio 2013\Projects\TDLHookLib\EntitySerialization\obj\Debug\EntitySerialization.exe
+D:\User\Documents\Visual Studio 2013\Projects\TDLHookLib\EntitySerialization\obj\Debug\EntitySerialization.pdb

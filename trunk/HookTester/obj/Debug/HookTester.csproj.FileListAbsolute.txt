@@ -1,0 +1,22 @@
+d:\user\documents\visual studio 2013\Projects\TDLHookLib\HookTester\bin\Debug\HookTester.exe.config
+d:\user\documents\visual studio 2013\Projects\TDLHookLib\HookTester\bin\Debug\HookTester.exe
+d:\user\documents\visual studio 2013\Projects\TDLHookLib\HookTester\bin\Debug\HookTester.pdb
+d:\user\documents\visual studio 2013\Projects\TDLHookLib\HookTester\obj\Debug\HookTester.csprojResolveAssemblyReference.cache
+d:\user\documents\visual studio 2013\Projects\TDLHookLib\HookTester\obj\Debug\HookTester.exe
+d:\user\documents\visual studio 2013\Projects\TDLHookLib\HookTester\obj\Debug\HookTester.pdb
+d:\user\documents\visual studio 2013\Projects\TDLHookLib\HookTester\bin\Debug\TDLHookLib.dll
+d:\user\documents\visual studio 2013\Projects\TDLHookLib\HookTester\bin\Debug\TDLHookLib.pdb
+d:\user\documents\visual studio 2013\Projects\TDLHookLib\HookTester\bin\Debug\UnityEngine.dll
+d:\user\documents\visual studio 2013\Projects\TDLHookLib\HookTester\bin\Debug\Assembly-CSharp.dll
+d:\user\documents\visual studio 2013\Projects\TDLHookLib\HookTester\bin\Debug\Assembly-CSharp-firstpass.dll
+d:\user\documents\visual studio 2013\Projects\TDLHookLib\HookTester\bin\Debug\SteamworksManaged.dll
+d:\user\documents\visual studio 2013\Projects\TDLHookLib\HookTester\bin\Debug\zneGif.dll
+d:\user\documents\visual studio 2013\Projects\TDLHookLib\HookTester\bin\Debug\Mono.Security.dll
+D:\Game Modding\TDL\TDLModding\HookTester\bin\Debug\HookTester.exe.config
+D:\Game Modding\TDL\TDLModding\HookTester\bin\Debug\HookTester.exe
+D:\Game Modding\TDL\TDLModding\HookTester\bin\Debug\HookTester.pdb
+D:\Game Modding\TDL\TDLModding\HookTester\bin\Debug\TDLHookLib.dll
+D:\Game Modding\TDL\TDLModding\HookTester\bin\Debug\TDLHookLib.pdb
+D:\Game Modding\TDL\TDLModding\HookTester\obj\Debug\HookTester.csprojResolveAssemblyReference.cache
+D:\Game Modding\TDL\TDLModding\HookTester\obj\Debug\HookTester.exe
+D:\Game Modding\TDL\TDLModding\HookTester\obj\Debug\HookTester.pdb

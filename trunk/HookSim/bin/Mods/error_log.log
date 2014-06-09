@@ -1,0 +1,5 @@
+System.Security.SecurityException: ECall methods must be packaged into a system module.
+   at TDLHookLib.TDLPlugin.WriteOutTextAssets()
+   at TDLHookLib.TDLPlugin.HookTDL(Object[] args)
+The Zone of the assembly that failed was:
+MyComputer

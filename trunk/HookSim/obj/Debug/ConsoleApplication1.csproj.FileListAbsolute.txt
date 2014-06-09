@@ -1,0 +1,6 @@
+d:\user\documents\visual studio 2013\Projects\TDLHookLib\ConsoleApplication1\bin\Debug\ConsoleApplication1.exe.config
+d:\user\documents\visual studio 2013\Projects\TDLHookLib\ConsoleApplication1\obj\Debug\ConsoleApplication1.csprojResolveAssemblyReference.cache
+d:\user\documents\visual studio 2013\Projects\TDLHookLib\ConsoleApplication1\bin\Debug\ConsoleApplication1.exe
+d:\user\documents\visual studio 2013\Projects\TDLHookLib\ConsoleApplication1\bin\Debug\ConsoleApplication1.pdb
+d:\user\documents\visual studio 2013\Projects\TDLHookLib\ConsoleApplication1\obj\Debug\ConsoleApplication1.exe
+d:\user\documents\visual studio 2013\Projects\TDLHookLib\ConsoleApplication1\obj\Debug\ConsoleApplication1.pdb

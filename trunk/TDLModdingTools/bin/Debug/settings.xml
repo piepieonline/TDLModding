@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfSettingsEntry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <SettingsEntry>
+    <key>TDL_Path</key>
+    <value />
+  </SettingsEntry>
+  <SettingsEntry>
+    <key>IL_ASM_Path</key>
+    <value>C:\Windows\Microsoft.NET\Framework\v2.0.50727\ilasm.exe</value>
+  </SettingsEntry>
+  <SettingsEntry>
+    <key>IL_DASM_Path</key>
+    <value>C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Bin\ildasm.exe</value>
+  </SettingsEntry>
+</ArrayOfSettingsEntry>
