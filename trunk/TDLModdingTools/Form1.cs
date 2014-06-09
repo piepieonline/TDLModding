@@ -74,13 +74,15 @@ namespace TDLModdingTools
 
         private void codeToTreeView()
         {
+            treeReady = false;
+            treeView1.Nodes.Clear();
             string[] lines = ilCodeViewBox.Lines;
             for (int i = 0; i < lines.Length; i++)
             {
                 string line = lines[i].TrimStart(new char[] { '\t', ' ' });
 
-                if (i == 200379)
-                    Debug.Print(line);
+                //if (i == 200379)
+                //    Debug.Print(line);
 
                 //if (line.StartsWith("IL_") && line.Substring(7, 1) == ":")
                 //    ilCodeViewBox.Lines[i] = line.Substring(line.IndexOf(":") + 1);
@@ -190,6 +192,24 @@ namespace TDLModdingTools
         {
             SettingsDialog dia = new SettingsDialog();
             dia.ShowDialog();
+        }
+
+
+        //My god. This worked, easily.
+        private void insertHookToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string hookClassText = File.ReadAllText(Application.StartupPath + "//TDLHookCode//class.txt");
+            string hookMethodText = File.ReadAllText(Application.StartupPath + "//TDLHookCode//examplemethod.txt");
+
+            string classMarker = "// =============================================================";
+
+            int methodTopIndex = ilCodeViewBox.GetFirstCharIndexFromLine(ilCodeViewBox.GetLineFromCharIndex(ilCodeViewBox.Text.IndexOf(@"loadTable() cil managed")) - 1);
+            int methodBottomIndex = ilCodeViewBox.Text.IndexOf(@"// end of method EntityTable::loadTable", methodTopIndex);
+
+            ilCodeViewBox.Text = ilCodeViewBox.Text.Insert(ilCodeViewBox.Text.LastIndexOf(classMarker) - 1, hookClassText);
+
+            ilCodeViewBox.Text = ilCodeViewBox.Text.Remove(methodTopIndex, methodBottomIndex - methodTopIndex);
+            ilCodeViewBox.Text = ilCodeViewBox.Text.Insert(methodTopIndex, hookMethodText);
         }
     }
 }

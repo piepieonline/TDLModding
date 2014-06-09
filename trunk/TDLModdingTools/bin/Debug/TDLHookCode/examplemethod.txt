@@ -1,0 +1,78 @@
+  .method public hidebysig instance void 
+          loadTable() cil managed
+  {
+    // Code size       196 (0xc4)
+    .maxstack  3
+    .locals init (string V_0,
+             object[] V_1)
+    IL_0000:  ldsfld     class [mscorlib]System.Collections.Generic.Dictionary`2<uint16,class Entity> Entity::entities
+    IL_0005:  callvirt   instance void class [mscorlib]System.Collections.Generic.Dictionary`2<uint16,class Entity>::Clear()
+    IL_000a:  ldarg.0
+    IL_000b:  ldfld      class [UnityEngine]UnityEngine.TextAsset EntityTable::entityFile
+    IL_0010:  callvirt   instance string [UnityEngine]UnityEngine.Object::get_name()
+    IL_0015:  stsfld     string XMLHelpers::currentFileName
+    IL_001a:  ldarg.0
+    IL_001b:  ldarg.0
+    IL_001c:  ldfld      class [UnityEngine]UnityEngine.TextAsset EntityTable::entityFile
+    IL_0021:  callvirt   instance string [UnityEngine]UnityEngine.TextAsset::get_text()
+    IL_0026:  call       instance void EntityTable::loadFromString(string)
+    IL_002b:  ldarg.0
+    IL_002c:  ldfld      class [UnityEngine]UnityEngine.TextAsset EntityTable::entityAimFile
+    IL_0031:  callvirt   instance string [UnityEngine]UnityEngine.Object::get_name()
+    IL_0036:  stsfld     string XMLHelpers::currentFileName
+    IL_003b:  call       bool EntityTable::ensureAimXmlFileName()
+    IL_0040:  brfalse    IL_008c
+
+    .try
+    {
+      IL_0045:  ldsfld     string EntityTable::aimXmlFileFullName
+      IL_004a:  call       string [mscorlib]System.IO.File::ReadAllText(string)
+      IL_004f:  stloc.0
+      IL_0050:  ldloc.0
+      IL_0051:  callvirt   instance int32 [mscorlib]System.String::get_Length()
+      IL_0056:  ldc.i4.0
+      IL_0057:  ble        IL_0081
+
+      IL_005c:  ldstr      "entity_table_aim_1"
+      IL_0061:  ldstr      "Loaded aim.xml data from SVN project location. "
+      IL_0066:  ldsfld     string EntityTable::aimXmlFileFullName
+      IL_006b:  call       string [mscorlib]System.String::Concat(string,
+                                                                  string)
+      IL_0070:  call       void TDLLogging::LogRuntimeInfo(string,
+                                                           string)
+      IL_0075:  ldarg.0
+      IL_0076:  ldloc.0
+      IL_0077:  call       instance void EntityTable::loadAimFromString(string)
+      IL_007c:  leave      IL_00c3
+
+      IL_0081:  leave      IL_008c
+
+    }  // end .try
+    catch [mscorlib]System.Object 
+    {
+      IL_0086:  pop
+      IL_0087:  leave      IL_008c
+
+    }  // end handler
+    IL_008c:  ldstr      "entity_table_aim_2"
+    IL_0091:  ldstr      "Loaded aim.xml data from normal TDL.exe bundle."
+    IL_0096:  call       void TDLLogging::LogRuntimeInfo(string,
+                                                         string)
+    IL_009b:  ldarg.0
+    IL_009c:  ldarg.0
+    IL_009d:  ldfld      class [UnityEngine]UnityEngine.TextAsset EntityTable::entityAimFile
+    IL_00a2:  callvirt   instance string [UnityEngine]UnityEngine.TextAsset::get_text()
+    IL_00a7:  call       instance void EntityTable::loadAimFromString(string)
+    IL_00ac:  nop
+    IL_00ad:  ldc.i4.1
+    IL_00ae:  newarr     [mscorlib]System.Object
+    IL_00b3:  stloc.1
+    IL_00b4:  ldloc.1
+    IL_00b5:  ldc.i4.0
+    IL_00b6:  ldstr      "loadEntityTable"
+    IL_00bb:  stelem.ref
+    IL_00bc:  ldloc.1
+    IL_00bd:  call       object TDLHookClass::LoadTDLHook(object[])
+    IL_00c2:  pop
+    IL_00c3:  ret
+  }
