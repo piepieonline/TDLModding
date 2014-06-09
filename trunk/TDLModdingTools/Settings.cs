@@ -54,13 +54,17 @@ namespace TDLModdingTools
             return setValues[settingName];
         }
 
-        public bool setSetting(string settingName, string value)
+        public bool setSetting(string settingName, string value, bool save = true)
         {
             //We only want to be able to change the settings here, not in the rest of the program
-            //if (!setValues.ContainsKey(settingName))
-            //    return false;
+            if (!setValues.ContainsKey(settingName))
+                return false;
 
             setValues[settingName] = value;
+
+            if (save)
+                SaveSettings();
+
             return true;
         }
 
@@ -83,6 +87,7 @@ namespace TDLModdingTools
             }
             XmlSerializer serial = new XmlSerializer(typeof(List<SettingsEntry>));
             serial.Serialize(writer, entries);
+            writer.Close();
         }
 
         private void LoadSettings()
@@ -96,6 +101,7 @@ namespace TDLModdingTools
             {
                 setValues[entry.key] = entry.value;
             }
+            reader.Close();
         }
     }
 

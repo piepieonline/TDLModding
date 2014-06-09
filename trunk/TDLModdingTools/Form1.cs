@@ -42,9 +42,19 @@ namespace TDLModdingTools
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            String fileToDasm = @"D:\SteamLibrary\SteamApps\common\The Dead Linger\TDL_Data\Managed\Assembly-CSharp.dll";
+            //String fileToDasm = @"D:\SteamLibrary\SteamApps\common\The Dead Linger\TDL_Data\Managed\Assembly-CSharp.dll";
 
-            openedFileName = "Assembly-CSharp";
+            OpenFileDialog openDia = new OpenFileDialog();
+            //openDia.FileName = "Assembly-CSharp";
+            openDia.RestoreDirectory = false;
+            openDia.Filter = "Executables/Libraries (*.exe; *.dll)|*.exe;*.dll|All Files (*.*)|*.*";
+            openDia.InitialDirectory = Settings.Singleton().getSetting("TDL_Path") + @"TDL_Data\Managed\";
+
+            if (openDia.ShowDialog() != DialogResult.OK)
+                return;
+
+            String fileToDasm = openDia.FileName;
+            openedFileName = openDia.SafeFileName.Substring(0, openDia.SafeFileName.LastIndexOf('.'));
 
             // Start the child process.
             Process p = new Process();
@@ -54,10 +64,7 @@ namespace TDLModdingTools
             p.StartInfo.FileName = Settings.Singleton().getSetting("IL_DASM_Path");
             p.StartInfo.Arguments = " \"" + fileToDasm + "\"" + @" /TEXT";
             p.Start();
-            // Do not wait for the child process to exit before
-            // reading to the end of its redirected stream.
-            // p.WaitForExit();
-            // Read the output stream first and then wait.
+            // Read the output stream first and then wait for exit.
             string output = p.StandardOutput.ReadToEnd();
             p.WaitForExit();
 
@@ -71,6 +78,12 @@ namespace TDLModdingTools
             for (int i = 0; i < lines.Length; i++)
             {
                 string line = lines[i].TrimStart(new char[] { '\t', ' ' });
+
+                if (i == 200379)
+                    Debug.Print(line);
+
+                //if (line.StartsWith("IL_") && line.Substring(7, 1) == ":")
+                //    ilCodeViewBox.Lines[i] = line.Substring(line.IndexOf(":") + 1);
 
                 if (line.StartsWith(".class"))
                 {
@@ -120,10 +133,7 @@ namespace TDLModdingTools
             p.StartInfo.FileName = Settings.Singleton().getSetting("IL_ASM_Path");
             p.StartInfo.Arguments = "/DLL \"" + Application.StartupPath + "//" + openedFileName + ".il" + "\"";
             p.Start();
-            // Do not wait for the child process to exit before
-            // reading to the end of its redirected stream.
-            // p.WaitForExit();
-            // Read the output stream first and then wait.
+            // Read the output stream first and then wait for exit.
             string output = p.StandardOutput.ReadToEnd();
             p.WaitForExit();
 
@@ -134,6 +144,9 @@ namespace TDLModdingTools
 
         private void richTextBox1_KeyUp(object sender, KeyEventArgs e)
         {
+            //Ctrl-F
+            //Find
+            //...Should probably be a setting
             if (e.Control && e.KeyCode == Keys.F)
             {
                 FindReplace find = new FindReplace();
@@ -149,15 +162,19 @@ namespace TDLModdingTools
         private bool treeReady = false;
         private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
         {
+            //If the tree is loaded and ready, then we can go searching for the code selected
             if (treeReady)
             {
+                //No scrolling if we don't have focus
                 ilCodeViewBox.Focus();
+                //Select the line
                 ilCodeViewBox.Select(ilCodeViewBox.GetFirstCharIndexFromLine(((LineRefTreeNode)treeView1.SelectedNode).refLineNumber), 0);
+                //Now scroll
                 ilCodeViewBox.ScrollToCaret();
-                //MessageBox.Show(ilCodeViewBox.Lines[((LineRefTreeNode)treeView1.SelectedNode).refLineNumber + 1]);
             }
         }
 
+        //Sort based on key entry
         private void treeView1_KeyUp(object sender, KeyEventArgs e)
         {
             int keyValue = e.KeyValue;
@@ -169,15 +186,10 @@ namespace TDLModdingTools
             }
         }
 
-        public class LineRefTreeNode : TreeNode
+        private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            public int refLineNumber { get; set; }
-
-            public LineRefTreeNode(string text, int lineNo)
-                : base(text)
-            {
-                refLineNumber = lineNo;
-            }
+            SettingsDialog dia = new SettingsDialog();
+            dia.ShowDialog();
         }
     }
 }
