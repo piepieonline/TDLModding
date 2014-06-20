@@ -15,3 +15,14 @@ D:\User\Documents\Visual Studio 2013\Projects\TDLHookLib\TDLModdingTools\obj\Deb
 D:\Game Modding\TDL\TDLModding\TDLModdingTools\bin\Debug\TDLModdingTools.exe.config
 D:\Game Modding\TDL\TDLModding\TDLModdingTools\obj\Debug\TDLModdingTools.exe
 D:\Game Modding\TDL\TDLModding\TDLModdingTools\obj\Debug\TDLModdingTools.pdb
+D:\Game Modding\TDL\TDLModding\trunk\TDLModdingTools\bin\Debug\TDLModdingTools.exe.config
+D:\Game Modding\TDL\TDLModding\trunk\TDLModdingTools\obj\Debug\TDLModdingTools.exe
+D:\Game Modding\TDL\TDLModding\trunk\TDLModdingTools\obj\Debug\TDLModdingTools.pdb
+D:\Game Modding\TDL\TDLModding\trunk\TDLModdingTools\bin\Debug\TDLModdingTools.exe
+D:\Game Modding\TDL\TDLModding\trunk\TDLModdingTools\bin\Debug\TDLModdingTools.pdb
+D:\Game Modding\TDL\TDLModding\trunk\TDLModdingTools\obj\Debug\TDLModdingTools.csprojResolveAssemblyReference.cache
+D:\Game Modding\TDL\TDLModding\trunk\TDLModdingTools\obj\Debug\TDLModdingTools.FindReplace.resources
+D:\Game Modding\TDL\TDLModding\trunk\TDLModdingTools\obj\Debug\TDLModdingTools.Form1.resources
+D:\Game Modding\TDL\TDLModding\trunk\TDLModdingTools\obj\Debug\TDLModdingTools.Properties.Resources.resources
+D:\Game Modding\TDL\TDLModding\trunk\TDLModdingTools\obj\Debug\TDLModdingTools.SettingsDialog.resources
+D:\Game Modding\TDL\TDLModding\trunk\TDLModdingTools\obj\Debug\TDLModdingTools.csproj.GenerateResource.Cache

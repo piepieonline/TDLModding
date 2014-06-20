@@ -2,7 +2,7 @@
 <ArrayOfSettingsEntry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <SettingsEntry>
     <key>TDL_Path</key>
-    <value />
+    <value>D:\SteamLibrary\SteamApps\common\The Dead Linger\</value>
   </SettingsEntry>
   <SettingsEntry>
     <key>IL_ASM_Path</key>

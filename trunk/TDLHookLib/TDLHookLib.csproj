@@ -30,61 +30,67 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="LoadEntityTable.cs" />
+    <Compile Include="Mod.cs" />
+    <Compile Include="ObjImporter.cs" />
+    <Compile Include="TDLPlugin.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <Reference Include="Assembly-CSharp">
-      <HintPath>..\..\..\..\..\..\SteamLibrary\SteamApps\common\The Dead Linger\TDL_Data\Managed\Assembly-CSharp.dll</HintPath>
+      <HintPath>..\..\..\..\..\SteamLibrary\SteamApps\common\The Dead Linger\TDL_Data\Managed\Assembly-CSharp.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Assembly-CSharp-firstpass">
-      <HintPath>..\..\..\..\..\..\SteamLibrary\SteamApps\common\The Dead Linger\TDL_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
+      <HintPath>..\..\..\..\..\SteamLibrary\SteamApps\common\The Dead Linger\TDL_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Assembly-UnityScript">
-      <HintPath>..\..\..\..\..\..\SteamLibrary\SteamApps\common\The Dead Linger\TDL_Data\Managed\Assembly-UnityScript.dll</HintPath>
+      <HintPath>..\..\..\..\..\SteamLibrary\SteamApps\common\The Dead Linger\TDL_Data\Managed\Assembly-UnityScript.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Assembly-UnityScript-firstpass">
-      <HintPath>..\..\..\..\..\..\SteamLibrary\SteamApps\common\The Dead Linger\TDL_Data\Managed\Assembly-UnityScript-firstpass.dll</HintPath>
+      <HintPath>..\..\..\..\..\SteamLibrary\SteamApps\common\The Dead Linger\TDL_Data\Managed\Assembly-UnityScript-firstpass.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Boo.Lang">
-      <HintPath>..\..\..\..\..\..\SteamLibrary\SteamApps\common\The Dead Linger\TDL_Data\Managed\Boo.Lang.dll</HintPath>
+      <HintPath>..\..\..\..\..\SteamLibrary\SteamApps\common\The Dead Linger\TDL_Data\Managed\Boo.Lang.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="DecalSystem.Runtime">
-      <HintPath>..\..\..\..\..\..\SteamLibrary\SteamApps\common\The Dead Linger\TDL_Data\Managed\DecalSystem.Runtime.dll</HintPath>
+      <HintPath>..\..\..\..\..\SteamLibrary\SteamApps\common\The Dead Linger\TDL_Data\Managed\DecalSystem.Runtime.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Mono.Security">
-      <HintPath>..\..\..\..\..\..\SteamLibrary\SteamApps\common\The Dead Linger\TDL_Data\Managed\Mono.Security.dll</HintPath>
+      <HintPath>..\..\..\..\..\SteamLibrary\SteamApps\common\The Dead Linger\TDL_Data\Managed\Mono.Security.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="SteamworksManaged">
-      <HintPath>..\..\..\..\..\..\SteamLibrary\SteamApps\common\The Dead Linger\TDL_Data\Managed\SteamworksManaged.dll</HintPath>
+      <HintPath>..\..\..\..\..\SteamLibrary\SteamApps\common\The Dead Linger\TDL_Data\Managed\SteamworksManaged.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-    <Reference Include="UnityEngine">
-      <HintPath>..\..\..\..\..\..\SteamLibrary\SteamApps\common\The Dead Linger\TDL_Data\Managed\UnityEngine.dll</HintPath>
+    <Reference Include="System.Xml">
+      <HintPath>..\..\..\..\..\SteamLibrary\SteamApps\common\The Dead Linger\TDL_Data\Managed\System.Xml.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>..\..\..\..\..\SteamLibrary\SteamApps\common\The Dead Linger\TDL_Data\Managed\UnityEngine.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityObjLoader, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\SteamLibrary\SteamApps\common\The Dead Linger\TDL_Data\Managed\UnityObjLoader.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="UnityScript.Lang">
-      <HintPath>..\..\..\..\..\..\SteamLibrary\SteamApps\common\The Dead Linger\TDL_Data\Managed\UnityScript.Lang.dll</HintPath>
+      <HintPath>..\..\..\..\..\SteamLibrary\SteamApps\common\The Dead Linger\TDL_Data\Managed\UnityScript.Lang.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="zneGif">
-      <HintPath>..\..\..\..\..\..\SteamLibrary\SteamApps\common\The Dead Linger\TDL_Data\Managed\zneGif.dll</HintPath>
+      <HintPath>..\..\..\..\..\SteamLibrary\SteamApps\common\The Dead Linger\TDL_Data\Managed\zneGif.dll</HintPath>
       <Private>False</Private>
     </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="TDLPlugin.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

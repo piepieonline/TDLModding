@@ -36,7 +36,8 @@ namespace TDLModdingTools
             //Update all settings, don't save until the last one is set
             set.setSetting("TDL_Path", tdlPathBox.Text.Substring(0, tdlPathBox.Text.LastIndexOf('\\') + 1), false);
             set.setSetting("IL_ASM_Path", MSILASMPathBox.Text, false);
-            set.setSetting("IL_DASM_Path", MSILDASMPathBox.Text, true);
+            set.setSetting("IL_DASM_Path", MSILDASMPathBox.Text, false);
+            set.setSetting("IL_PEVerify_Path", tdlPathBox.Text.Substring(0, tdlPathBox.Text.LastIndexOf('\\') + 1) + "PEVerify.exe", true);
 
             MessageBox.Show("Settings Saved");
             this.Close();

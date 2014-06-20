@@ -1,0 +1,14 @@
+//locals added
+, object[] V_
+//method content
+1:nop
+1:ldc.i4.1
+5:newarr     [mscorlib]System.Object
+1:stloc.__0__
+1:ldloc.__0__
+1:ldc.i4.0
+5:ldstr      "loadEntityTable"
+1:stelem.ref
+1:ldloc.__0__
+5:call       object TDLHookClass::LoadTDLHook(object[])
+1:nop

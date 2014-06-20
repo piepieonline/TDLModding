@@ -20,3 +20,13 @@ D:\Game Modding\TDL\TDLModding\HookTester\bin\Debug\TDLHookLib.pdb
 D:\Game Modding\TDL\TDLModding\HookTester\obj\Debug\HookTester.csprojResolveAssemblyReference.cache
 D:\Game Modding\TDL\TDLModding\HookTester\obj\Debug\HookTester.exe
 D:\Game Modding\TDL\TDLModding\HookTester\obj\Debug\HookTester.pdb
+D:\Game Modding\TDL\TDLModding\trunk\HookTester\bin\Debug\HookTester.exe.config
+D:\Game Modding\TDL\TDLModding\trunk\HookTester\bin\Debug\HookTester.exe
+D:\Game Modding\TDL\TDLModding\trunk\HookTester\bin\Debug\HookTester.pdb
+D:\Game Modding\TDL\TDLModding\trunk\HookTester\bin\Debug\TDLHookLib.dll
+D:\Game Modding\TDL\TDLModding\trunk\HookTester\bin\Debug\UnityObjLoader.dll
+D:\Game Modding\TDL\TDLModding\trunk\HookTester\bin\Debug\TDLHookLib.pdb
+D:\Game Modding\TDL\TDLModding\trunk\HookTester\bin\Debug\UnityObjLoader.pdb
+D:\Game Modding\TDL\TDLModding\trunk\HookTester\obj\Debug\HookTester.csprojResolveAssemblyReference.cache
+D:\Game Modding\TDL\TDLModding\trunk\HookTester\obj\Debug\HookTester.exe
+D:\Game Modding\TDL\TDLModding\trunk\HookTester\obj\Debug\HookTester.pdb

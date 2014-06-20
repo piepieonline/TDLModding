@@ -7,3 +7,10 @@ D:\Game Modding\TDL\TDLModding\TDLHookLib\bin\Debug\TDLHookLib.dll
 D:\Game Modding\TDL\TDLModding\TDLHookLib\bin\Debug\TDLHookLib.pdb
 D:\Game Modding\TDL\TDLModding\TDLHookLib\obj\Debug\TDLHookLib.dll
 D:\Game Modding\TDL\TDLModding\TDLHookLib\obj\Debug\TDLHookLib.pdb
+D:\Game Modding\TDL\TDLModding\trunk\TDLHookLib\bin\Debug\TDLHookLib.dll
+D:\Game Modding\TDL\TDLModding\trunk\TDLHookLib\bin\Debug\TDLHookLib.pdb
+D:\Game Modding\TDL\TDLModding\trunk\TDLHookLib\obj\Debug\TDLHookLib.dll
+D:\Game Modding\TDL\TDLModding\trunk\TDLHookLib\obj\Debug\TDLHookLib.pdb
+D:\Game Modding\TDL\TDLModding\trunk\TDLHookLib\obj\Debug\TDLHookLib.csprojResolveAssemblyReference.cache
+D:\Game Modding\TDL\TDLModding\trunk\TDLHookLib\bin\Debug\UnityObjLoader.dll
+D:\Game Modding\TDL\TDLModding\trunk\TDLHookLib\bin\Debug\UnityObjLoader.pdb

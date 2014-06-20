@@ -73,6 +73,7 @@ namespace TDLModdingTools
             setValues.Add("TDL_Path", @"");
             setValues.Add("IL_ASM_Path", @"C:\Windows\Microsoft.NET\Framework\v2.0.50727\ilasm.exe");
             setValues.Add("IL_DASM_Path", @"C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Bin\ildasm.exe");
+            setValues.Add("IL_PEVerify_Path", @"C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Bin\PEVerify.exe");
 
             SaveSettings();
         }
