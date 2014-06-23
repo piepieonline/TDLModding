@@ -65,13 +65,22 @@ namespace TDLHookLib
                     {
                         if (!bool.Parse(eleList[i].SelectSingleNode("@enabled").Value))
                             continue;
-                        
+
+                        //Is this mod allowed to use code?
+                        bool canRunScripts = false;
+                        try
+                        {
+                            canRunScripts = bool.Parse(eleList[i].SelectSingleNode("@scripts").Value);
+                        }
+                        catch
+                        {}
+
                         string modPath = eleList[i].SelectSingleNode("text()").Value;
                         modDoc.Load(path + "\\" + modPath + "\\info.xml");
                         string modName = modDoc.SelectSingleNode("mod/name/text()").Value;
                         string modVersion = modDoc.SelectSingleNode("mod/version/text()").Value;
                         string modAuthor = modDoc.SelectSingleNode("mod/author/text()").Value;
-                        modsTemp.Add(new Mod(modName, modVersion, modAuthor, modPath));
+                        modsTemp.Add(new Mod(modName, modVersion, modAuthor, modPath, canRunScripts));
                     }
                     mods = modsTemp.ToArray();
 
@@ -88,7 +97,6 @@ namespace TDLHookLib
 
                     //Add the ModsMenu menu
                     TDLMenuCommon.Singleton.gameObject.AddComponent<ModsMenu>();
-                    //MainMenu.Singleton.gameObject.AddComponent<ModsMenu>();
 
                     //Check settings, such as TextAsset dumps
                     if (!debugging)
@@ -125,6 +133,9 @@ namespace TDLHookLib
                     case "ShowModMenu":
                         ModsMenu.activateGUI();
                         break;
+                    case "InteractDown":
+                        pl.interactDown();
+                        break;
                     default:
                         DebugOutput("No hook found for '" + command + "'");
                         break;
@@ -151,8 +162,10 @@ namespace TDLHookLib
                 "",
                 "<!-- Loads from the top down. So the last mod will overwrite any conflicts in the first -->",
                 "<!-- Note that the directory doesn't need any slashes - For the example mod, it will look in TDL_Data/Mods/ExampleMod/* -->",
+                "<!-- Disable scripts on mods that you don't trust, as they have system wide access. However, this may break some mods -->",
 	            "<loadorder>",
 			    "\t\t<!--<modpath enabled='true'>ExampleMod</modpath>-->",
+                "\t\t<!--<modpath enabled='true' scripts='true'>ExampleModWithScripts</modpath>-->",
 	            "\t</loadorder>",
                 "</modloader>"
             });
@@ -217,32 +230,6 @@ namespace TDLHookLib
             //Temporary - give us a spawner command, to test with
             DebugConsole.RegisterCommand("/spawn", new DebugConsole.DebugCommand(this.spawner_callback));
 
-            Light l = null;
-            try
-            {
-                Entity candle = Entity.GetEntityByName("candle_lit");
-
-                GameObject obj = new GameObject();
-
-                obj.transform.parent = candle.prefab.transform;
-                float offset = candle.prefab.collider.bounds.size.y;
-
-                obj.transform.localPosition = new Vector3(0, offset, 0);
-
-                l = obj.AddComponent<Light>();
-                l.color = new Color(255f, 81f, 25f);
-                l.intensity = 0.01f;
-                l.range = 10f;
-                l.shadows = LightShadows.Soft;
-                l.shadowStrength = 0.3f;
-                l.type = LightType.Point;
-                //Need this, or it'll not light objects
-                l.renderMode = LightRenderMode.ForcePixel;
-                obj.AddComponent<FlickerComp>();
-            }
-            catch(Exception)
-            { }
-
             try
             {
                 Entity bin = Entity.GetEntityByName("prop_trash_wheelybin");
@@ -266,28 +253,37 @@ namespace TDLHookLib
             //cam.renderingPath = RenderingPath.DeferredLighting;
 
 
-            //Not working
-            //LocalPlayerManager.p.unityGameObject.AddComponent<ModdedInput>();
+            //Adding our own bikes and such
+            //...Promising...
+            string n = Entity.GetEntityByName("bicycle_mountainbike").prefab.GetComponent<TDLTwoWheelVehicleMotor>().frontWheelNode.GetComponent<Transform>().position.ToString();
 
-            
+            DebugConsole.Log(n);
 
-            //DebugConsole.Log(Entity.GetEntityByName("item_food_apple").prefab.rigidbody.AddTorque(Vector3.zero, ForceMode.);
-            //DebugConsole.Log(Entity.GetEntityByName("prop_trash_wheelybin").prefab.layer);
+            Entity.GetEntityByName("bicycle_mountainbike").prefab.GetComponent<TDLTwoWheelVehicleMotor>().frontWheelNode.GetComponent<Transform>().position = new Vector3(0f, 1.0f, 0.6f);
 
             string compList = "";
-            foreach (Animation anim in GameObject.FindObjectsOfType<Animation>())
-                compList += anim.GetType().ToString() + "\n";
-            File.WriteAllText(@"D:\anim.txt", compList);
-
-            //Entity.GetEntityByName("bicycle_mountainbike").prefab.GetComponent<LODGroup>().LODS[1] = 8;
+            foreach (Component c in Entity.GetEntityByName("bicycle_mountainbike").prefab.GetComponent<TDLTwoWheelVehicleMotor>().frontWheelNode.GetComponents<Component>())
+            {
+                compList += c.GetType().ToString();
+            }
+            File.WriteAllText(@"D:\bike.txt", compList);
 
             DebugOutput("Probe Finished");
+        }
+
+        public void interactDown()
+        {
+            if (LocalPlayerManager.p.cursorTarget != null)
+            {
+                DebugOutput("Player grabbing at");
+            }
         }
     }
 
  
 
     //Candle test
+    /*
     public class FlickerComp : MonoBehaviour
     {
         float maxInt = 0.02f;
@@ -300,30 +296,7 @@ namespace TDLHookLib
                 light.intensity += 0.001f;
         }
     }
-
-    public class ModdedInput : MonoBehaviour
-    {
-        bool constrainX = false;
-        bool constrainY = false;
-        bool constrainZ = false;
-
-        void Start()
-        {
-            DebugConsole.Log("ModdedInput Started");
-        }
-
-        void Update()
-        {
-            if (Input.GetKeyUp(KeyCode.X))
-            {
-                constrainX = !constrainX;
-                DebugConsole.Log(constrainX);
-            }
-
-            //LocalPlayerManager.p.tdlPlayer.carryObject.unityGameObject.rigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
-        }
-    }
-
+    */
     //Collision manager
     public class PhysHoldComp : MonoBehaviour
     {

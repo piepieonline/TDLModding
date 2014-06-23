@@ -13,6 +13,7 @@ using UnityEngine;
 using System.IO;
 using System.Xml;
 using System.Timers;
+using System.Reflection;
 
 namespace TDLHookLib
 {
@@ -20,9 +21,11 @@ namespace TDLHookLib
     {
         private static List<string> loadList = new List<string>();
         private static FileIO.LoadCallback objLoadedCallback = new FileIO.LoadCallback(objLoaded);
-        //private static Dictionary<string, string> objToEntity = new Dictionary<string, string>();
 
         private static List<ModelEntityMapping> objToEntity = new List<ModelEntityMapping>();
+        //private static List<>
+
+        //private static Dictionary<string, Type> scriptComponents = new Dictionary<string, Type>();
 
         private static Timer loadTimer;
 
@@ -35,8 +38,23 @@ namespace TDLHookLib
                 //Determine the path to load the mod from
                 string workingPath = TDLPlugin.path + "/" + loadingMod.Path + "/";
 
-                loadModEntities(workingPath);
+                //Load all of the components
 
+                //Load the script dll file, if it exists
+                Assembly workingAssembly = null;
+                try
+                {
+                    //Security check
+                    if(loadingMod.CanRunScripts)
+                        workingAssembly = Assembly.LoadFile(workingPath + loadingMod.Name + ".dll");
+                }
+                catch
+                { }
+
+                //Load the entities
+                loadModEntities(workingPath, loadingMod.Name, workingAssembly);
+
+                //Load other text assets - such as spawn categories, or recipies
                 if (Directory.Exists(workingPath + "textassets"))
                 {
                     loadCategories(workingPath + "textassets");
@@ -53,7 +71,7 @@ namespace TDLHookLib
         }
 
         #region EntityTable
-        public void loadModEntities(string workingPath)
+        public void loadModEntities(string workingPath, string modName, Assembly workingAssembly)
         {
             //If we have entities to load, do so
             workingPath += "entities";
@@ -133,15 +151,9 @@ namespace TDLHookLib
                             { }
 
                             //Load our model
-                            //Blank components, these will be written to later
-                            newPrefab.AddComponent<MeshFilter>();
-                            newPrefab.AddComponent<MeshRenderer>();
-
                             loadList.Add(workingPath + "/" + entityDoc.SelectSingleNode("/entity/mesh/text()").Value);
                             string meshFileName = entityDoc.SelectSingleNode("/entity/mesh/text()").Value;
-                            //objToEntity.Add(meshFileName.Substring(0, meshFileName.LastIndexOf('.')), entityName);
                             objToEntity.Add(new ModelEntityMapping(meshFileName.Substring(0, meshFileName.LastIndexOf('.')), entityName));
-
                         }
                     }
                     catch
@@ -224,10 +236,28 @@ namespace TDLHookLib
                         //Nope, no physics
                     }
 
+                    //Script Components
+                    try
+                    {
+                        XmlNodeList componentListXML = entityDoc.SelectNodes("/entity/scripts/*");
+                        //Add all scripts to the entity
+                        for (int i = 0; i < componentListXML.Count; i++)
+                        {
+                            newPrefab.AddComponent(workingAssembly.GetType("Mod." + modName + "." + componentListXML[i].SelectSingleNode("text()").Value));//, true));
+                        }
+                    }
+                    catch
+                    {
+                        //No scripts to load
+                    }
+
                     //Reassign the prefab
                     newEnt.prefab = newPrefab;
                 }
             }
+            //Assembly assemble = Assembly.LoadFile(@"D:\SteamLibrary\SteamApps\common\The Dead Linger\TDL_Data\Mods\RotateLock\RotateLock.dll");
+            //TDLMenuCommon.Singleton.gameObject.AddComponent(assemble.GetType("Mod.RotateLock.RotateLockComponent", true));
+
         }
 
         public static void objLoaded(GameObject[] loaded)
@@ -241,8 +271,8 @@ namespace TDLHookLib
                 TDLPlugin.DebugOutput(objToEntity[0].entity + " Loaded");
 
                 //Assign the loaded components
-                Entity.GetEntityByName(objToEntity[0].entity).prefab.GetComponent<MeshFilter>().mesh = loaded[0].GetComponent<MeshFilter>().mesh;
-                Entity.GetEntityByName(objToEntity[0].entity).prefab.GetComponent<MeshRenderer>().material = loaded[0].GetComponent<MeshRenderer>().material;
+                Entity.GetEntityByName(objToEntity[0].entity).prefab.AddComponent<MeshFilter>().mesh = loaded[0].GetComponent<MeshFilter>().mesh;
+                Entity.GetEntityByName(objToEntity[0].entity).prefab.AddComponent<MeshRenderer>().material = loaded[0].GetComponent<MeshRenderer>().material;
 
                 //Destroy the created GameObject, and remove the head of the list
                 Destroy.Destroy(loaded[0]);
@@ -250,13 +280,9 @@ namespace TDLHookLib
 
                 //If we have more than 1 object to load, start loading again
                 if (loadList.Count > 0)
-                {
                     loadTimer.Enabled = true;
-                }
                 else
-                {
-                    //LocalPlayerManager.p.unityGameObject.AddComponent<ModdedInput>();
-                }
+                    AllModelsLoadedHandler();
             }
             catch (Exception ex)
             {
@@ -277,6 +303,9 @@ namespace TDLHookLib
             loadNextObjFile();
             loadTimer.Enabled = false;
         }
+
+        private static void AllModelsLoadedHandler()
+        {}
 
         private struct ModelEntityMapping
         {

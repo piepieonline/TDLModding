@@ -62,6 +62,9 @@
       <HintPath>..\..\..\..\..\SteamLibrary\SteamApps\common\The Dead Linger\TDL_Data\Managed\DecalSystem.Runtime.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="gmcs">
+      <HintPath>..\..\..\..\..\SteamLibrary\SteamApps\common\The Dead Linger\TDL_Data\Managed\gmcs.exe</HintPath>
+    </Reference>
     <Reference Include="Mono.Security">
       <HintPath>..\..\..\..\..\SteamLibrary\SteamApps\common\The Dead Linger\TDL_Data\Managed\Mono.Security.dll</HintPath>
       <Private>False</Private>
@@ -70,7 +73,9 @@
       <HintPath>..\..\..\..\..\SteamLibrary\SteamApps\common\The Dead Linger\TDL_Data\Managed\SteamworksManaged.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="System" />
+    <Reference Include="System">
+      <HintPath>..\..\..\..\..\SteamLibrary\SteamApps\common\The Dead Linger\TDL_Data\Managed\System.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml">
       <HintPath>..\..\..\..\..\SteamLibrary\SteamApps\common\The Dead Linger\TDL_Data\Managed\System.Xml.dll</HintPath>
       <Private>False</Private>
