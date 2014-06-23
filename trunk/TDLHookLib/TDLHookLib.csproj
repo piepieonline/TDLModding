@@ -32,6 +32,7 @@
   <ItemGroup>
     <Compile Include="LoadEntityTable.cs" />
     <Compile Include="Mod.cs" />
+    <Compile Include="ModsMenu.cs" />
     <Compile Include="ObjImporter.cs" />
     <Compile Include="TDLPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

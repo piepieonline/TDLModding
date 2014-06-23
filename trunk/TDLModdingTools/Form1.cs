@@ -111,18 +111,48 @@ namespace TDLModdingTools
             treeReady = true;
 
             //TEMP: Find EntityTable::LoadTable
-            ilCodeViewBox.Focus();
-            ilCodeViewBox.SelectionStart = ilCodeViewBox.Text.IndexOf("// end of method EntityTable::loadTable");
-            ilCodeViewBox.ScrollToCaret();
+            //ilCodeViewBox.Focus();
+            //ilCodeViewBox.SelectionStart = ilCodeViewBox.Text.IndexOf("// end of method EntityTable::loadTable");
+            //ilCodeViewBox.ScrollToCaret();
         }
 
         private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            File.WriteAllText(Application.StartupPath + "//" + openedFileName + ".il", ilCodeViewBox.Text);
+            SaveFileDialog saveDia = new SaveFileDialog();
+            saveDia.RestoreDirectory = false;
+            saveDia.Filter = "Libraries (*.dll)|*.dll|All Files (*.*)|*.*";
+            saveDia.InitialDirectory = Settings.Singleton().getSetting("TDL_Path") + @"TDL_Data\Managed\";
 
-            csCodeViewBox.Text = runExternalTool(Settings.Singleton().getSetting("IL_ASM_Path"), "/DLL \"" + Application.StartupPath + "//" + openedFileName + ".il" + "\"");
-            File.Delete(Application.StartupPath + "//" + openedFileName + ".il");
-            MessageBox.Show("File saved to " + Application.StartupPath + "\\" + openedFileName + ".dll" );
+            saveDia.AddExtension = true;
+
+            if (saveDia.ShowDialog() != DialogResult.OK)
+                return;
+
+            //Remove the path and extension
+            String fileToAsm = saveDia.FileName.Substring(saveDia.FileName.LastIndexOf('\\') + 1);
+            fileToAsm = fileToAsm.Substring(0, fileToAsm.LastIndexOf('.'));
+
+            //Write the IL Code to a file
+            File.WriteAllText(Application.StartupPath + "//" + fileToAsm + ".il", ilCodeViewBox.Text.Replace("\t", "    "));
+
+            //Compile it
+            csCodeViewBox.Text = runExternalTool(Settings.Singleton().getSetting("IL_ASM_Path"), "/DLL \"" + Application.StartupPath + "//" + fileToAsm + ".il" + "\"");
+            
+            //Delete the IL File, and move the created dll
+            File.Delete(Application.StartupPath + "//" + fileToAsm + ".il");
+
+            if (File.Exists(Application.StartupPath + "\\" + fileToAsm + ".dll") && File.Exists(saveDia.FileName))
+                File.Delete(saveDia.FileName);
+
+            try
+            {
+                File.Move(Application.StartupPath + "\\" + fileToAsm + ".dll", saveDia.FileName);
+                MessageBox.Show("File saved to " + saveDia.FileName);
+            }
+            catch
+            {
+                MessageBox.Show("An error occured, check the output.");
+            }
         }
 
         private void richTextBox1_KeyUp(object sender, KeyEventArgs e)
@@ -182,13 +212,13 @@ namespace TDLModdingTools
 
             string classMarker = "// =============================================================";
 
-            //int methodTopIndex = ilCodeViewBox.GetFirstCharIndexFromLine(ilCodeViewBox.GetLineFromCharIndex(ilCodeViewBox.Text.IndexOf(@"loadTable() cil managed")) - 1);
-            //int methodBottomIndex = ilCodeViewBox.Text.IndexOf(@"// end of method EntityTable::loadTable", methodTopIndex);
+            int methodTopIndex = ilCodeViewBox.GetFirstCharIndexFromLine(ilCodeViewBox.GetLineFromCharIndex(ilCodeViewBox.Text.IndexOf(@"loadTable() cil managed")) - 1);
+            int methodBottomIndex = ilCodeViewBox.Text.IndexOf(@"// end of method EntityTable::loadTable", methodTopIndex);
 
             ilCodeViewBox.Text = ilCodeViewBox.Text.Insert(ilCodeViewBox.Text.LastIndexOf(classMarker) - 1, hookClassText);
 
-            //ilCodeViewBox.Text = ilCodeViewBox.Text.Remove(methodTopIndex, methodBottomIndex - methodTopIndex);
-            //ilCodeViewBox.Text = ilCodeViewBox.Text.Insert(methodTopIndex, hookMethodText);
+            ilCodeViewBox.Text = ilCodeViewBox.Text.Remove(methodTopIndex, methodBottomIndex - methodTopIndex);
+            ilCodeViewBox.Text = ilCodeViewBox.Text.Insert(methodTopIndex, hookMethodText);
         }
 
         private void verifyToolStripMenuItem_Click(object sender, EventArgs e)

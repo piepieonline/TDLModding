@@ -1,4 +1,9 @@
-﻿using System;
+﻿/* LoadEntityTable.cs by Piepieonline
+ * We use this class to do the most common mods - entities
+ * Both new and existing are handled here
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,7 +20,9 @@ namespace TDLHookLib
     {
         private static List<string> loadList = new List<string>();
         private static FileIO.LoadCallback objLoadedCallback = new FileIO.LoadCallback(objLoaded);
-        private static Dictionary<string, string> objToEntity = new Dictionary<string, string>();
+        //private static Dictionary<string, string> objToEntity = new Dictionary<string, string>();
+
+        private static List<ModelEntityMapping> objToEntity = new List<ModelEntityMapping>();
 
         private static Timer loadTimer;
 
@@ -29,7 +36,12 @@ namespace TDLHookLib
                 string workingPath = TDLPlugin.path + "/" + loadingMod.Path + "/";
 
                 loadModEntities(workingPath);
-                loadCategories(workingPath);
+
+                if (Directory.Exists(workingPath + "textassets"))
+                {
+                    loadCategories(workingPath + "textassets");
+                    loadRecipes(workingPath + "textassets");
+                }
             }
             //Create the timer to load the next object
             //Some bug in the lib means that I can't call repeatedly
@@ -81,13 +93,30 @@ namespace TDLHookLib
                     try
                     {
                         newEnt.carry = bool.Parse(entityDoc.SelectSingleNode("/entity/properties/canCarry/text()").Value);
+                    }
+                    catch
+                    {}
+
+                    try
+                    {
                         newEnt.drag = bool.Parse(entityDoc.SelectSingleNode("/entity/properties/canDrag/text()").Value);
+                    }
+                    catch
+                    { }
+
+                    try
+                    {
                         newEnt.nearFlag = bool.Parse(entityDoc.SelectSingleNode("/entity/properties/near/text()").Value);
                     }
-                    catch (System.Xml.XPath.XPathException)
+                    catch
+                    { }
+
+                    try
                     {
-                        //Nope, no properties
+                        newEnt.lootEntry = new LootEntry(entityDoc.SelectSingleNode("/entity/properties/lootEntry/text()").Value.Split(','));
                     }
+                    catch
+                    { }
 
                     //Mesh
                     try
@@ -110,10 +139,12 @@ namespace TDLHookLib
 
                             loadList.Add(workingPath + "/" + entityDoc.SelectSingleNode("/entity/mesh/text()").Value);
                             string meshFileName = entityDoc.SelectSingleNode("/entity/mesh/text()").Value;
-                            objToEntity.Add(meshFileName.Substring(0, meshFileName.LastIndexOf('.')), entityName);
+                            //objToEntity.Add(meshFileName.Substring(0, meshFileName.LastIndexOf('.')), entityName);
+                            objToEntity.Add(new ModelEntityMapping(meshFileName.Substring(0, meshFileName.LastIndexOf('.')), entityName));
+
                         }
                     }
-                    catch (System.Xml.XPath.XPathException)
+                    catch
                     {
                         //Nope, no mesh
                     }
@@ -126,7 +157,8 @@ namespace TDLHookLib
                         {
                             if (Boolean.Parse(entityDoc.SelectSingleNode("/entity/physics/@replace").Value))
                             {
-                                Destroy.Destroy(newPrefab.collider);
+                                foreach(Collider col in newPrefab.GetComponents<Collider>())
+                                    Destroy.Destroy(col);
                             }
                         }
                         catch (System.Xml.XPath.XPathException)
@@ -140,6 +172,7 @@ namespace TDLHookLib
                         for (int i = 0; i < eleList.Count; i++)
                         {
                             string type = eleList[i].Name;
+
                             //TODO: Add all col types to this
                             Collider newCol = null;
                             switch (type)
@@ -175,12 +208,19 @@ namespace TDLHookLib
                                     TDLPlugin.DebugOutput("Unknown physics type: " + type);
                                     break;
                             }
+
+                            try
+                            {
+                                newCol.name = eleList[i].Attributes["id"].Value;
+                                DebugConsole.Log("Setting name " + newCol.name + " on " + newPrefab.name);
+                            }
+                            catch
+                            {}
                         }
 
                     }
-                    catch (System.Xml.XPath.XPathException)
+                    catch
                     {
-                        TDLPlugin.DebugOutput("phys xml error");
                         //Nope, no physics
                     }
 
@@ -194,18 +234,29 @@ namespace TDLHookLib
         {
             try
             {
-                TDLPlugin.DebugOutput(objToEntity[loaded[0].name] + " Loaded");
-               
-                //Assign the loaded components
-                Entity.GetEntityByName(objToEntity[loaded[0].name]).prefab.GetComponent<MeshFilter>().mesh = loaded[0].GetComponent<MeshFilter>().mesh;
-                Entity.GetEntityByName(objToEntity[loaded[0].name]).prefab.GetComponent<MeshRenderer>().material = loaded[0].GetComponent<MeshRenderer>().material;
+                //Sanity check
+                if (objToEntity[0].model != loaded[0].name)
+                    throw new Exception("Mod loading failed. Model doesn't map to entity. " + objToEntity[0].model + " != " + loaded[0].name);
 
-                //Destroy the created GameObject
+                TDLPlugin.DebugOutput(objToEntity[0].entity + " Loaded");
+
+                //Assign the loaded components
+                Entity.GetEntityByName(objToEntity[0].entity).prefab.GetComponent<MeshFilter>().mesh = loaded[0].GetComponent<MeshFilter>().mesh;
+                Entity.GetEntityByName(objToEntity[0].entity).prefab.GetComponent<MeshRenderer>().material = loaded[0].GetComponent<MeshRenderer>().material;
+
+                //Destroy the created GameObject, and remove the head of the list
                 Destroy.Destroy(loaded[0]);
+                objToEntity.RemoveAt(0);
 
                 //If we have more than 1 object to load, start loading again
-                if(loadList.Count > 0)
+                if (loadList.Count > 0)
+                {
                     loadTimer.Enabled = true;
+                }
+                else
+                {
+                    //LocalPlayerManager.p.unityGameObject.AddComponent<ModdedInput>();
+                }
             }
             catch (Exception ex)
             {
@@ -227,68 +278,121 @@ namespace TDLHookLib
             loadTimer.Enabled = false;
         }
 
+        private struct ModelEntityMapping
+        {
+            public string model;
+            public string entity;
+
+            public ModelEntityMapping(string _model, string _entity)
+            {
+                model = _model;
+                entity = _entity;
+            }
+        }
+
         #endregion
 
-        #region Categories
-            private void loadCategories(string workingPath)
+        #region TextAssets
+        private void loadCategories(string workingPath)
+        {
+            if (File.Exists(workingPath + "/categories.xml"))
             {
-                workingPath += "textassets";
+                //We are modifying catagories, lets go
+                XmlDocument categoryDoc = new XmlDocument();
+                //Load the file
+                categoryDoc.LoadXml(System.IO.File.ReadAllText(workingPath += "/categories.xml"));
 
-                if(Directory.Exists(workingPath))
+                XmlNodeList catList = categoryDoc.SelectNodes("/textasset/*");
+                //Iterate through all categories
+                for (int catCount = 0; catCount < catList.Count; catCount++)
                 {
-                    if(File.Exists(workingPath + "/categories.xml"))
+                    string category = catList[catCount].SelectSingleNode("@id").Value;
+                    try
                     {
-                        //We are modifying catagories, lets go
-                        XmlDocument categoryDoc = new XmlDocument();
-                        //Load the file
-                        categoryDoc.LoadXml(System.IO.File.ReadAllText(workingPath += "/categories.xml"));
-
-                        XmlNodeList catList = categoryDoc.SelectNodes("/textasset/*");
-                        //Iterate through all categories
-                        for (int catCount = 0; catCount < catList.Count; catCount++)
+                        SubCategory newSub;
+                        //Additions
+                        XmlNodeList addList = catList[catCount].SelectNodes("add/*");
+                        for (int addCount = 0; addCount < addList.Count; addCount++)
                         {
-                            string category = catList[catCount].SelectSingleNode("@id").Value;
-                            SubCategory newSub;
-                            //Additions
-                            XmlNodeList addList = catList[catCount].SelectNodes("add/*");
-                            for(int addCount = 0; addCount < addList.Count; addCount++)
+                            //TDLPlugin.DebugOutput(addList[addCount].SelectSingleNode("entity/@id").Value);
+                            //Create the new entry
+                            newSub = new SubCategory()
                             {
-                                //TDLPlugin.DebugOutput(addList[addCount].SelectSingleNode("entity/@id").Value);
-                                //Create the new entry
-                                newSub = new SubCategory()
-                                {
-                                    name = addList[addCount].SelectSingleNode("@id").Value,
-                                    freq = float.Parse(addList[addCount].SelectSingleNode("frequency/text()").Value),
-                                    subgroup = addList[addCount].SelectSingleNode("subgroup/text()").Value
-                                };
-                                //Add it
-                                CategoryReader.categories[category].subcats.Add(addList[addCount].SelectSingleNode("@id").Value, newSub);
-                            }
-                            //Modifications
-                            XmlNodeList modList = catList[catCount].SelectNodes("modify/*");
-                            for (int modCount = 0; modCount < modList.Count; modCount++)
+                                name = addList[addCount].SelectSingleNode("@id").Value,
+                                freq = float.Parse(addList[addCount].SelectSingleNode("frequency/text()").Value),
+                                subgroup = addList[addCount].SelectSingleNode("subgroup/text()").Value
+                            };
+                            //Add it
+                            CategoryReader.categories[category].subcats.Add(addList[addCount].SelectSingleNode("@id").Value, newSub);
+                        }
+                        //Modifications
+                        XmlNodeList modList = catList[catCount].SelectNodes("modify/*");
+                        for (int modCount = 0; modCount < modList.Count; modCount++)
+                        {
+                            //Create the new entry
+                            newSub = new SubCategory()
                             {
-                                //Create the new entry
-                                newSub = new SubCategory()
-                                {
-                                    name = modList[modCount].SelectSingleNode("@id").Value,
-                                    freq = float.Parse(modList[modCount].SelectSingleNode("frequency/text()").Value),
-                                    subgroup = modList[modCount].SelectSingleNode("subgroup/text()").Value
-                                };
-                                //Change it
-                                CategoryReader.categories[category].subcats[modList[modCount].SelectSingleNode("@id").Value] = newSub;
-                            }
-                            //Removals
-                            XmlNodeList remList = catList[catCount].SelectNodes("remove/*");
-                            for (int remCount = 0; remCount < remList.Count; remCount++)
-                            {
-                                //Delete it
-                                CategoryReader.categories[category].subcats.Remove(remList[remCount].SelectSingleNode("@id").Value);
-                            }
+                                name = modList[modCount].SelectSingleNode("@id").Value,
+                                freq = float.Parse(modList[modCount].SelectSingleNode("frequency/text()").Value),
+                                subgroup = modList[modCount].SelectSingleNode("subgroup/text()").Value
+                            };
+                            //Change it
+                            CategoryReader.categories[category].subcats[modList[modCount].SelectSingleNode("@id").Value] = newSub;
+                        }
+                        //Removals
+                        XmlNodeList remList = catList[catCount].SelectNodes("remove/*");
+                        for (int remCount = 0; remCount < remList.Count; remCount++)
+                        {
+                            //Delete it
+                            CategoryReader.categories[category].subcats.Remove(remList[remCount].SelectSingleNode("@id").Value);
+                        }
+                    }
+                    catch (System.Collections.Generic.KeyNotFoundException)
+                    {
+                        DebugConsole.LogError("Category not found: " + category);
+                    }
+                }
+            }
+        }
+
+        private void loadRecipes(string workingPath)
+        {
+            if (File.Exists(workingPath + "/recipies.xml"))
+            {
+                //We are modifying catagories, lets go
+                XmlDocument craftingDoc = new XmlDocument();
+                //Load the file
+                craftingDoc.LoadXml(System.IO.File.ReadAllText(workingPath += "/recipies.xml"));
+
+
+                //...Not gunna lie, lifted from TDL IL Code
+                foreach (XmlNode current in craftingDoc.ChildNodes)
+                {
+                    if (current.Name != "crafting")
+                    {
+                        continue;
+                    }
+                    foreach (XmlNode xmlNodes in current.ChildNodes)
+                    {
+                        if (xmlNodes.Name != "recipe")
+                        {
+                            continue;
+                        }
+                        CraftingRecipe craftingRecipe = new CraftingRecipe();
+                        craftingRecipe.Load(xmlNodes);
+                        if (!CraftingDefinitions.recipes.ContainsKey(craftingRecipe.name))
+                        {
+                            CraftingDefinitions.recipes[craftingRecipe.name] = craftingRecipe;
+                        }
+                        else
+                        {
+                            TDLLogging.LogError("reci_1", string.Concat("ERROR - Duplicate recipe name in recipies.xml: ", craftingRecipe.name));
+                            CraftingDefinitions.recipes[string.Concat(craftingRecipe.name, "_error")] = craftingRecipe;
                         }
                     }
                 }
             }
+        }
         #endregion
     }
 }

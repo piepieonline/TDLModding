@@ -1,4 +1,11 @@
-﻿#define DEBUG_CONSOLE
+﻿/* TDLPlugin.cs by Piepieonline
+ * 
+ * This module gets called by the game, with HookTDL(System.Object[] args) it's entry point
+ * It then determines what to do with each intercept, and sends it along
+ * 
+ * TODO: Potentially register handlers for calls from the game, rather than a hardcoded switch 
+ */
+#define DEBUG_CONSOLE
 
 using System;
 using System.Collections.Generic;
@@ -34,7 +41,6 @@ namespace TDLHookLib
         //The game will call this function
         public static System.Object HookTDL(System.Object[] args)
         {
-            DebugOutput("TDL Modding Hook Called...");
             try
             {
                 //Set the startup path, so we can find the modding directory
@@ -50,14 +56,26 @@ namespace TDLHookLib
 
                     //Load the mods
 
-                    //TODO: Added 'enable' as an option
-                    XmlNodeList eleList = settingsDoc.SelectNodes("/modloader/loadorder/mod");
-                    mods = new Mod[eleList.Count];
+                    XmlDocument modDoc = new XmlDocument();
+                    XmlNodeList eleList = settingsDoc.SelectNodes("/modloader/loadorder/*");
+
+                    List<Mod> modsTemp = new List<Mod>();
+                    
                     for (int i = 0; i < eleList.Count; i++)
                     {
-                        mods[i] = new Mod(eleList[i].SelectSingleNode("@name").Value, eleList[i].SelectSingleNode("path/text()").Value);
+                        if (!bool.Parse(eleList[i].SelectSingleNode("@enabled").Value))
+                            continue;
+                        
+                        string modPath = eleList[i].SelectSingleNode("text()").Value;
+                        modDoc.Load(path + "\\" + modPath + "\\info.xml");
+                        string modName = modDoc.SelectSingleNode("mod/name/text()").Value;
+                        string modVersion = modDoc.SelectSingleNode("mod/version/text()").Value;
+                        string modAuthor = modDoc.SelectSingleNode("mod/author/text()").Value;
+                        modsTemp.Add(new Mod(modName, modVersion, modAuthor, modPath));
                     }
-                    
+                    mods = modsTemp.ToArray();
+
+
                     //Load the settings
                     eleList = settingsDoc.SelectNodes("/modloader/settings/setting");
                     for (int i = 0; i < eleList.Count; i++)
@@ -67,6 +85,10 @@ namespace TDLHookLib
 
                     //Create the reference
                     pl = new TDLPlugin();
+
+                    //Add the ModsMenu menu
+                    TDLMenuCommon.Singleton.gameObject.AddComponent<ModsMenu>();
+                    //MainMenu.Singleton.gameObject.AddComponent<ModsMenu>();
 
                     //Check settings, such as TextAsset dumps
                     if (!debugging)
@@ -97,9 +119,12 @@ namespace TDLHookLib
                         let = new LoadEntityTable();
 
                         //TEMP
-                        pl.probingCode();
+                        //pl.probingCode();
 
-                        return "";//System.IO.File.ReadAllText(path + "/mod/entity.xml");
+                        return "";
+                    case "ShowModMenu":
+                        ModsMenu.activateGUI();
+                        break;
                     default:
                         DebugOutput("No hook found for '" + command + "'");
                         break;
@@ -113,6 +138,7 @@ namespace TDLHookLib
             return null;
         }
 
+        //If the player doesn't have a mod directory, lets make one
         private static void CreateModDirectory()
         {
             Directory.CreateDirectory(path);
@@ -126,9 +152,7 @@ namespace TDLHookLib
                 "<!-- Loads from the top down. So the last mod will overwrite any conflicts in the first -->",
                 "<!-- Note that the directory doesn't need any slashes - For the example mod, it will look in TDL_Data/Mods/ExampleMod/* -->",
 	            "<loadorder>",
-		        "\t<!--<mod name='ExampleMod'>",
-			    "\t\t\t<path>ExampleMod</path>",
-		        "\t\t</mod>-->",
+			    "\t\t<!--<modpath enabled='true'>ExampleMod</modpath>-->",
 	            "\t</loadorder>",
                 "</modloader>"
             });
@@ -193,26 +217,69 @@ namespace TDLHookLib
             //Temporary - give us a spawner command, to test with
             DebugConsole.RegisterCommand("/spawn", new DebugConsole.DebugCommand(this.spawner_callback));
 
-            Entity candle = Entity.GetEntityByName("candle_lit");
+            Light l = null;
+            try
+            {
+                Entity candle = Entity.GetEntityByName("candle_lit");
 
-            Light l = candle.prefab.AddComponent<Light>();
-            l.color = new Color(255f, 81f, 25f);
-            l.intensity = 0.02f;
-            l.shadows = LightShadows.Soft;
-            l.shadowStrength = 0.3f;
-            candle.prefab.AddComponent<FlickerComp>();
+                GameObject obj = new GameObject();
 
-            candle.lootEntry = new LootEntry(new string[]
-                {
-                    "candle_unlit",
-                    "Candle (Unlit)",
-                    "1x1",
-                    "misc",
-                    "0",
-                    "weight(0)",
-                    "Kumbaya"
-                });
+                obj.transform.parent = candle.prefab.transform;
+                float offset = candle.prefab.collider.bounds.size.y;
 
+                obj.transform.localPosition = new Vector3(0, offset, 0);
+
+                l = obj.AddComponent<Light>();
+                l.color = new Color(255f, 81f, 25f);
+                l.intensity = 0.01f;
+                l.range = 10f;
+                l.shadows = LightShadows.Soft;
+                l.shadowStrength = 0.3f;
+                l.type = LightType.Point;
+                //Need this, or it'll not light objects
+                l.renderMode = LightRenderMode.ForcePixel;
+                obj.AddComponent<FlickerComp>();
+            }
+            catch(Exception)
+            { }
+
+            try
+            {
+                Entity bin = Entity.GetEntityByName("prop_trash_wheelybin");
+
+                bin.prefab.AddComponent<PhysHoldComp>();
+            }
+            catch (Exception)
+            { }
+
+            DebugOutput(GameObject.FindObjectsOfType<Camera>().Length.ToString());
+
+            foreach(Camera c in GameObject.FindObjectsOfType<Camera>())
+            {
+                DebugOutput(c.name);
+                //c.renderingPath = RenderingPath.DeferredLighting;
+            }
+
+
+
+            //Camera cam = GameObject.FindObjectOfType<Camera>();
+            //cam.renderingPath = RenderingPath.DeferredLighting;
+
+
+            //Not working
+            //LocalPlayerManager.p.unityGameObject.AddComponent<ModdedInput>();
+
+            
+
+            //DebugConsole.Log(Entity.GetEntityByName("item_food_apple").prefab.rigidbody.AddTorque(Vector3.zero, ForceMode.);
+            //DebugConsole.Log(Entity.GetEntityByName("prop_trash_wheelybin").prefab.layer);
+
+            string compList = "";
+            foreach (Animation anim in GameObject.FindObjectsOfType<Animation>())
+                compList += anim.GetType().ToString() + "\n";
+            File.WriteAllText(@"D:\anim.txt", compList);
+
+            //Entity.GetEntityByName("bicycle_mountainbike").prefab.GetComponent<LODGroup>().LODS[1] = 8;
 
             DebugOutput("Probe Finished");
         }
@@ -232,5 +299,124 @@ namespace TDLHookLib
             else
                 light.intensity += 0.001f;
         }
+    }
+
+    public class ModdedInput : MonoBehaviour
+    {
+        bool constrainX = false;
+        bool constrainY = false;
+        bool constrainZ = false;
+
+        void Start()
+        {
+            DebugConsole.Log("ModdedInput Started");
+        }
+
+        void Update()
+        {
+            if (Input.GetKeyUp(KeyCode.X))
+            {
+                constrainX = !constrainX;
+                DebugConsole.Log(constrainX);
+            }
+
+            //LocalPlayerManager.p.tdlPlayer.carryObject.unityGameObject.rigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+        }
+    }
+
+    //Collision manager
+    public class PhysHoldComp : MonoBehaviour
+    {
+        /*void OnCollisionEnter(Collision coll)
+        {
+            if (coll.gameObject.name.ToLower() == "terrain")
+                return;
+        }*/
+
+        //List<Rigidbody> rbs = new List<Rigidbody>();
+        //bool hasJoints = false;
+
+        //Dictionary<string, PhysicMaterial> mats = new Dictionary<string, PhysicMaterial>();
+        /*
+        void OnTriggerEnter(Collider col)
+        {
+            mats[col.name] = col.material;
+
+            col.material = (PhysicMaterial)Resources.Load("PhysicMaterials/Rubber");
+            col.material.bounceCombine = PhysicMaterialCombine.Minimum;
+
+            if (!rbs.Contains(col.rigidbody) && col.rigidbody.name.ToLower() != "terrain")
+                rbs.Add(col.rigidbody);
+        }
+
+        void OnTriggerExit(Collider col)
+        {
+            col.material = mats[col.name];
+            mats.Remove(col.name);
+            
+            if (rbs.Contains(col.rigidbody))
+                rbs.Remove(col.rigidbody);
+        }
+        */
+
+        bool pickedUp = false;
+        Dictionary<int, Collider> bodies = new Dictionary<int, Collider>();
+        Dictionary<int, PhysicMaterial> mats = new Dictionary<int, PhysicMaterial>();
+        void Update()
+        {
+            if (!pickedUp && LocalPlayerManager.p.tdlPlayer.isDragging && WorldObject.findByGameObject(this.gameObject) == LocalPlayerManager.p.tdlPlayer.carryObject)
+            {
+                foreach(Collider col in Physics.OverlapSphere(this.gameObject.rigidbody.position, 1f))
+                {
+                    bodies[col.GetInstanceID()] = col;
+                    mats[col.GetInstanceID()] = col.material;
+
+                    col.material = (PhysicMaterial)Resources.Load("PhysicMaterials/Rubber");
+                    col.material.bounceCombine = PhysicMaterialCombine.Minimum;
+                }
+                pickedUp = true;
+            }
+            else if (pickedUp && !LocalPlayerManager.p.tdlPlayer.isDragging)
+            {
+                foreach(int key in bodies.Keys)
+                {
+                    bodies[key].material = mats[key];
+                }
+            }
+      
+        }
+
+        /*
+                    if (LocalPlayerManager.p.tdlPlayer.isCarrying && WorldObject.findByGameObject(this.gameObject) == LocalPlayerManager.p.tdlPlayer.carryObject)
+            {
+
+                Bounds shrunkBounds = this.GetComponent<MeshCollider>().bounds;
+                //shrunkBounds.Expand(-0.3f);
+
+                DebugConsole.Log(this.GetComponent<MeshCollider>().bounds.size.ToString() + " > " + shrunkBounds.size.ToString());
+
+                foreach (ContactPoint cp in coll.contacts)
+                {
+                    if (shrunkBounds.Contains(cp.point))
+                    {
+                        DebugConsole.Log("Joint Made");
+                        FixedJoint joint = this.gameObject.AddComponent<FixedJoint>();
+                        joint.connectedBody = coll.rigidbody;
+                        joint.breakForce = Mathf.Infinity;
+                        joint.breakTorque = Mathf.Infinity;
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                DebugConsole.Log("Joints Removed");
+                FixedJoint[] joints = this.gameObject.GetComponents<FixedJoint>();
+                for (int i = 0; i < joints.Length; i++)
+                {
+                    Destroy(joints[i]);
+                }
+            } 
+        */
     }
 }

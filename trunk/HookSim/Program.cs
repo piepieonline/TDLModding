@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 using System.Reflection;
 using System.Runtime.Remoting;
+
+using UnityEngine;
 
 namespace ConsoleApplication1
 {
@@ -20,28 +20,33 @@ namespace ConsoleApplication1
         
         public static void injectCode()
         {
-            Program.LoadTDLHook(new Object[] { "Resources" });
+            Program.LoadTDLHook(new System.Object[] { "Resources" });
         }
 
-        public static object LoadTDLHook(System.Object[] args)
+
+        private static object hookMethod = null;
+        private static MethodInfo method = null;
+
+        public static object LoadTDLHook(object[] args)
         {
-            String codebase = System.Reflection.Assembly.GetExecutingAssembly().CodeBase.Substring(8);
-            
-            codebase = codebase.Substring( 0, codebase.LastIndexOf("/") );
+            if (hookMethod == null)
+            {
+                string str = Assembly.GetExecutingAssembly().CodeBase.Substring(8);
+                str = str.Substring(0, str.LastIndexOf("/"));
+                string str1 = string.Concat((object)str, (object)"/TDLHookLib.dll");
+                string str2 = "TDLHookLib.TDLPlugin";
+                string str3 = "HookTDL";
+                Type type = Assembly.LoadFile(str1).GetType(str2);
+                method = type.GetMethod(str3);
+                method.GetParameters();
+                hookMethod = Activator.CreateInstance(type, null);
+            }
+            return method.Invoke(hookMethod, new object[] { args });
+        }
 
-            String assemblyName = codebase + "/TDLHookLib.dll";
-            String typeName = "TDLHookLib.TDLPlugin";
-            String methodName = "HookTDL";
-
-            System.Reflection.Assembly assembly = System.Reflection.Assembly.LoadFile(assemblyName);
-            Type type = assembly.GetType(typeName);
-
-            System.Reflection.MethodInfo methodInfo = type.GetMethod(methodName);
-
-            System.Reflection.ParameterInfo[] parameters = methodInfo.GetParameters();
-            object classInstance = Activator.CreateInstance(type, null);
-
-            return methodInfo.Invoke(classInstance, new Object[] { args });
+        public static void ShowModsMenu()
+        {
+            LoadTDLHook(new object[] { "ShowModMenu" });
         }
     }
 }

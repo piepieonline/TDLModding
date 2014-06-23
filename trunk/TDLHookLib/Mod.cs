@@ -9,13 +9,21 @@ namespace TDLHookLib
     public class Mod
     {
         public string Name { get; private set; }
+        public string Version { get; private set; }
+        public string Author { get; private set; }
         public string Path { get; private set; }
         
-        public Mod(string _name, string _path)
+        public Mod(string _name, string _version, string _author, string _path)
         {
             Name = _name;
+            Version = _version;
+            Author = _author;
             Path = _path;
         }
 
+        public string GetGUIListString()
+        {
+            return Name + " (v" + Version + ") by " + Author;
+        }
     }
 }

@@ -1,0 +1,227 @@
+  .method public hidebysig instance void 
+          TDLOnGUI() cil managed
+  {
+    // Code size       681 (0x2a9)
+    .maxstack  48
+    .locals init (class [UnityEngine]UnityEngine.GUIStyle V_0,
+             class [UnityEngine]UnityEngine.GUIStyle V_1,
+             class [UnityEngine]UnityEngine.GUIStyle V_2,
+             class [UnityEngine]UnityEngine.GUIStyle V_3,
+             bool V_4)
+    IL_0000:  ldsfld     bool MainMenu::visible
+    IL_0005:  brtrue     IL_000b
+
+    IL_000a:  ret
+
+    IL_000b:  ldarg.0
+    IL_000c:  ldfld      int32 MainMenu::GuiDepth
+    IL_0011:  call       void [UnityEngine]UnityEngine.GUI::set_depth(int32)
+    IL_0016:  call       void OnGuiManagerScript::preMenu()
+    IL_001b:  ldsfld     class TDLMenuCommon TDLMenuCommon::Singleton
+    IL_0020:  ldfld      class [UnityEngine]UnityEngine.GUISkin TDLMenuCommon::tdlSkin
+    IL_0025:  ldnull
+    IL_0026:  call       bool [UnityEngine]UnityEngine.Object::op_Inequality(class [UnityEngine]UnityEngine.Object,
+                                                                             class [UnityEngine]UnityEngine.Object)
+    IL_002b:  brfalse    IL_003f
+
+    IL_0030:  ldsfld     class TDLMenuCommon TDLMenuCommon::Singleton
+    IL_0035:  ldfld      class [UnityEngine]UnityEngine.GUISkin TDLMenuCommon::tdlSkin
+    IL_003a:  call       void [UnityEngine]UnityEngine.GUI::set_skin(class [UnityEngine]UnityEngine.GUISkin)
+    IL_003f:  newobj     instance void [UnityEngine]UnityEngine.GUIStyle::.ctor()
+    IL_0044:  stloc.0
+    IL_0045:  ldloc.0
+    IL_0046:  ldc.i4.s   20
+    IL_0048:  ldc.i4.s   20
+    IL_004a:  ldc.i4.s   20
+    IL_004c:  ldc.i4.s   20
+    IL_004e:  newobj     instance void [UnityEngine]UnityEngine.RectOffset::.ctor(int32,
+                                                                                  int32,
+                                                                                  int32,
+                                                                                  int32)
+    IL_0053:  callvirt   instance void [UnityEngine]UnityEngine.GUIStyle::set_border(class [UnityEngine]UnityEngine.RectOffset)
+    IL_0058:  ldsfld     class TDLMenuCommon TDLMenuCommon::Singleton
+    IL_005d:  callvirt   instance void TDLMenuCommon::fillMenuBackground()
+    IL_0062:  ldc.i4.0
+    IL_0063:  newarr     [UnityEngine]UnityEngine.GUILayoutOption
+    IL_0068:  call       void [UnityEngine]UnityEngine.GUILayout::BeginHorizontal(class [UnityEngine]UnityEngine.GUILayoutOption[])
+    IL_006d:  ldc.r4     20.
+    IL_0072:  call       void [UnityEngine]UnityEngine.GUILayout::Space(float32)
+    IL_0077:  ldc.i4.0
+    IL_0078:  newarr     [UnityEngine]UnityEngine.GUILayoutOption
+    IL_007d:  call       void [UnityEngine]UnityEngine.GUILayout::BeginVertical(class [UnityEngine]UnityEngine.GUILayoutOption[])
+    IL_0082:  ldc.r4     200.
+    IL_0087:  call       void [UnityEngine]UnityEngine.GUILayout::Space(float32)
+    IL_008c:  ldsfld     class TDLMenuCommon TDLMenuCommon::Singleton
+    IL_0091:  ldloca.s   V_1
+    IL_0093:  ldloca.s   V_2
+    IL_0095:  ldloca.s   V_3
+    IL_0097:  callvirt   instance bool TDLMenuCommon::adjustForPopup(class [UnityEngine]UnityEngine.GUIStyle&,
+                                                                     class [UnityEngine]UnityEngine.GUIStyle&,
+                                                                     class [UnityEngine]UnityEngine.GUIStyle&)
+    IL_009c:  stloc.s    V_4
+    IL_009e:  ldstr      "Solo Mode"
+    IL_00a3:  ldloc.1
+    IL_00a4:  ldc.i4.0
+    IL_00a5:  newarr     [UnityEngine]UnityEngine.GUILayoutOption
+    IL_00aa:  call       bool [UnityEngine]UnityEngine.GUILayout::Button(string,
+                                                                         class [UnityEngine]UnityEngine.GUIStyle,
+                                                                         class [UnityEngine]UnityEngine.GUILayoutOption[])
+    IL_00af:  brtrue     IL_00dc
+
+    IL_00b4:  ldsfld     class TheDeadLinger TheDeadLinger::tdl
+    IL_00b9:  ldfld      class TDLConfig TheDeadLinger::config
+    IL_00be:  callvirt   instance bool TDLConfig::get_isFastStart()
+    IL_00c3:  brfalse    IL_0104
+
+    IL_00c8:  ldsfld     class TheDeadLinger TheDeadLinger::tdl
+    IL_00cd:  ldfld      class TDLConfig TheDeadLinger::config
+    IL_00d2:  ldfld      bool TDLConfig::isDedicatedServer
+    IL_00d7:  brtrue     IL_0104
+
+    IL_00dc:  ldloc.s    V_4
+    IL_00de:  brfalse    IL_0104
+
+    IL_00e3:  ldsfld     class TheDeadLinger TheDeadLinger::tdl
+    IL_00e8:  ldc.i4.0
+    IL_00e9:  stfld      bool TheDeadLinger::isNetworkGameExpected
+    IL_00ee:  ldstr      "menu_click"
+    IL_00f3:  call       class AudioObject SfxScripts::PlaySfx(string)
+    IL_00f8:  pop
+    IL_00f9:  ldc.i4.0
+    IL_00fa:  call       void WorldSetupMenu::showWorldSelect(valuetype eGamePlayMode)
+    IL_00ff:  call       void MainMenu::deactivateGUI()
+    IL_0104:  ldstr      "Multiplayer"
+    IL_0109:  ldsfld     bool TheDeadLinger::soloModeOnly
+    IL_010e:  brfalse    IL_0122
+
+    IL_0113:  ldsfld     class TDLMenuCommon TDLMenuCommon::Singleton
+    IL_0118:  ldfld      class [UnityEngine]UnityEngine.GUIStyle TDLMenuCommon::tdlStyleMenuGrey
+    IL_011d:  br         IL_0123
+
+    IL_0122:  ldloc.1
+    IL_0123:  ldc.i4.0
+    IL_0124:  newarr     [UnityEngine]UnityEngine.GUILayoutOption
+    IL_0129:  call       bool [UnityEngine]UnityEngine.GUILayout::Button(string,
+                                                                         class [UnityEngine]UnityEngine.GUIStyle,
+                                                                         class [UnityEngine]UnityEngine.GUILayoutOption[])
+    IL_012e:  brfalse    IL_0144
+
+    IL_0133:  ldloc.s    V_4
+    IL_0135:  brfalse    IL_0144
+
+    IL_013a:  ldsfld     bool TheDeadLinger::soloModeOnly
+    IL_013f:  brfalse    IL_0158
+
+    IL_0144:  ldsfld     class TheDeadLinger TheDeadLinger::tdl
+    IL_0149:  ldfld      class TDLConfig TheDeadLinger::config
+    IL_014e:  ldfld      bool TDLConfig::isDedicatedServer
+    IL_0153:  brfalse    IL_0178
+
+    IL_0158:  ldsfld     class TheDeadLinger TheDeadLinger::tdl
+    IL_015d:  ldc.i4.1
+    IL_015e:  stfld      bool TheDeadLinger::isNetworkGameExpected
+    IL_0163:  ldstr      "menu_click"
+    IL_0168:  call       class AudioObject SfxScripts::PlaySfx(string)
+    IL_016d:  pop
+    IL_016e:  call       void MultiplayerMenu::activateGUI()
+    IL_0173:  call       void MainMenu::deactivateGUI()
+    IL_0178:  ldstr      "Delete World"
+    IL_017d:  ldloc.1
+    IL_017e:  ldc.i4.0
+    IL_017f:  newarr     [UnityEngine]UnityEngine.GUILayoutOption
+    IL_0184:  call       bool [UnityEngine]UnityEngine.GUILayout::Button(string,
+                                                                         class [UnityEngine]UnityEngine.GUIStyle,
+                                                                         class [UnityEngine]UnityEngine.GUILayoutOption[])
+    IL_0189:  brfalse    IL_01aa
+
+    IL_018e:  ldloc.s    V_4
+    IL_0190:  brfalse    IL_01aa
+
+    IL_0195:  ldstr      "menu_click"
+    IL_019a:  call       class AudioObject SfxScripts::PlaySfx(string)
+    IL_019f:  pop
+    IL_01a0:  call       void WorldDeleteMenu::showWorldSelect()
+    IL_01a5:  call       void MainMenu::deactivateGUI()
+    IL_01aa:  ldstr      "Settings"
+    IL_01af:  ldloc.1
+    IL_01b0:  ldc.i4.0
+    IL_01b1:  newarr     [UnityEngine]UnityEngine.GUILayoutOption
+    IL_01b6:  call       bool [UnityEngine]UnityEngine.GUILayout::Button(string,
+                                                                         class [UnityEngine]UnityEngine.GUIStyle,
+                                                                         class [UnityEngine]UnityEngine.GUILayoutOption[])
+    IL_01bb:  brfalse    IL_01dc
+
+    IL_01c0:  ldloc.s    V_4
+    IL_01c2:  brfalse    IL_01dc
+
+    IL_01c7:  ldstr      "menu_click"
+    IL_01cc:  call       class AudioObject SfxScripts::PlaySfx(string)
+    IL_01d1:  pop
+    IL_01d2:  call       void SettingsMenu::activateGUI()
+    IL_01d7:  call       void MainMenu::deactivateGUI()
+    IL_01dc:  ldstr      "Mods and Extras"
+    IL_01e1:  ldloc.1
+    IL_01e2:  ldc.i4.0
+    IL_01e3:  newarr     [UnityEngine]UnityEngine.GUILayoutOption
+    IL_01e8:  call       bool [UnityEngine]UnityEngine.GUILayout::Button(string,
+                                                                         class [UnityEngine]UnityEngine.GUIStyle,
+                                                                         class [UnityEngine]UnityEngine.GUILayoutOption[])
+    IL_01ed:  brfalse.s   IL_0204
+
+    IL_01f2:  ldloc.s    V_4
+    IL_01f4:  brfalse.s    IL_0204
+
+    IL_01f9:  ldstr      "menu_click"
+    IL_01fe:  call       class AudioObject SfxScripts::PlaySfx(string)
+    IL_0203:  pop
+    call       void TDLHookClass::ShowModsMenu()
+    call       void MainMenu::deactivateGUI()
+    IL_0204:  ldc.r4     10.
+    IL_0209:  call       void [UnityEngine]UnityEngine.GUILayout::Space(float32)
+    IL_020e:  ldstr      "Quit"
+    IL_0213:  ldloc.1
+    IL_0214:  ldc.i4.0
+    IL_0215:  newarr     [UnityEngine]UnityEngine.GUILayoutOption
+    IL_021a:  call       bool [UnityEngine]UnityEngine.GUILayout::Button(string,
+                                                                         class [UnityEngine]UnityEngine.GUIStyle,
+                                                                         class [UnityEngine]UnityEngine.GUILayoutOption[])
+    IL_021f:  brfalse.s    IL_025a
+
+    IL_0224:  ldloc.s    V_4
+    IL_0226:  brfalse.s    IL_025a
+
+    IL_022b:  ldstr      "menu_click"
+    IL_0230:  call       class AudioObject SfxScripts::PlaySfx(string)
+    IL_0235:  pop
+    IL_0236:  ldstr      "Are you sure you want to exit\?"
+    IL_023b:  call       void PopupDialog::showMessageOkCancel(string)
+    IL_0240:  ldstr      "Yes"
+    IL_0245:  stsfld     string PopupDialog::yesButtonText
+    IL_024a:  ldstr      "No"
+    IL_024f:  stsfld     string PopupDialog::noButtonText
+    IL_0254:  ldc.i4.1
+    IL_0255:  stsfld     bool MainMenu::waitingOnQuitPopup
+    IL_025a:  call       void [UnityEngine]UnityEngine.GUILayout::EndVertical()
+    IL_025f:  call       void [UnityEngine]UnityEngine.GUILayout::EndHorizontal()
+    IL_0264:  call       int32 [UnityEngine]UnityEngine.Screen::get_width()
+    IL_0269:  ldc.i4     0x177
+    IL_026e:  sub
+    IL_026f:  conv.r4
+    IL_0270:  ldc.r4     130.
+    IL_0275:  ldc.r4     375.
+    IL_027a:  ldc.r4     70.
+    IL_027f:  newobj     instance void [UnityEngine]UnityEngine.Rect::.ctor(float32,
+                                                                            float32,
+                                                                            float32,
+                                                                            float32)
+    IL_0284:  call       class LocalPlayerManager LocalPlayerManager::get_p()
+    IL_0289:  ldfld      string LocalPlayerManager::gamerTag
+    IL_028e:  call       void [UnityEngine]UnityEngine.GUI::Label(valuetype [UnityEngine]UnityEngine.Rect,
+                                                                  string)
+    IL_0293:  ldsfld     class TDLMenuCommon TDLMenuCommon::Singleton
+    IL_0298:  ldc.i4.1
+    IL_0299:  callvirt   instance void TDLMenuCommon::showTDLName(bool)
+    IL_029e:  ldsfld     class TDLMenuCommon TDLMenuCommon::Singleton
+    IL_02a3:  callvirt   instance void TDLMenuCommon::showTDLFooter()
+    IL_02a8:  ret
+  } // end of method MainMenu::TDLOnGUI
