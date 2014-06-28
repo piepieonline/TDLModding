@@ -122,9 +122,10 @@ namespace TDLHookLib
                     catch
                     { }
 
+                    //Still not sure what this does
                     try
                     {
-                        newEnt.nearFlag = bool.Parse(entityDoc.SelectSingleNode("/entity/properties/near/text()").Value);
+                        //newEnt.farOverride = bool.Parse(entityDoc.SelectSingleNode("/entity/properties/near/text()").Value);
                     }
                     catch
                     { }
@@ -154,6 +155,23 @@ namespace TDLHookLib
                             loadList.Add(workingPath + "/" + entityDoc.SelectSingleNode("/entity/mesh/text()").Value);
                             string meshFileName = entityDoc.SelectSingleNode("/entity/mesh/text()").Value;
                             objToEntity.Add(new ModelEntityMapping(meshFileName.Substring(0, meshFileName.LastIndexOf('.')), entityName));
+
+                            //Set the texture randomiser up
+                            try
+                            {
+                                XmlNodeList texturesList = entityDoc.SelectNodes("/entity/randomTextures/*");
+
+                                 //Add all of the possible textures
+                                 Texture2D[] possibleTextures = new Texture2D[texturesList.Count];
+                                 for (int i = 0; i < texturesList.Count; i++)
+                                 {
+                                     possibleTextures[i] = new Texture2D(int.Parse(texturesList[i].SelectSingleNode("@width").Value), int.Parse(texturesList[i].SelectSingleNode("@height").Value));
+                                     possibleTextures[i].LoadImage(System.IO.File.ReadAllBytes(workingPath + "/" + texturesList[i].SelectSingleNode("text()").Value));
+                                 }
+                                 newPrefab.AddComponent<TextureRandomiser>().textures = possibleTextures;
+                            }
+                            catch
+                            {}
                         }
                     }
                     catch
@@ -439,5 +457,21 @@ namespace TDLHookLib
             }
         }
         #endregion
+    }
+
+    //No way to save the chosen texture currently
+    //Not quite sure how to approach that
+    class TextureRandomiser : MonoBehaviour
+    {
+        public Texture2D[] textures;
+        
+        void Start()
+        {
+            if(textures.Length > 0)
+            {
+                int chosen = RandomGenerator.Singleton.nextInRange(0, textures.Length);
+                this.gameObject.renderer.material.mainTexture = textures[chosen];
+            }
+        }
     }
 }

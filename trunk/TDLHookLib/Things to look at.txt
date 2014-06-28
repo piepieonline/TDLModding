@@ -1,1 +1,5 @@
-﻿NPCPhysicsState collidableByThis()
+﻿Current Seed: 9085
+
+NPCPhysicsState collidableByThis()
+
+Redo the Obj importing, eventually

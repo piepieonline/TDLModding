@@ -127,7 +127,7 @@ namespace TDLHookLib
                         let = new LoadEntityTable();
 
                         //TEMP
-                        //pl.probingCode();
+                        pl.probingCode();
 
                         return "";
                     case "ShowModMenu":
@@ -216,9 +216,11 @@ namespace TDLHookLib
         {
             if (args.Length != 2)
                 return "Must have an object (E.G. 'bicycle_mountainbike') as a parameter.";
-            WorldPosition world = WorldPosition.ClientToWorld(LocalPlayerManager.p.localCamera.transform.position + (LocalPlayerManager.p.localCamera.transform.forward * 3f));
-            Moveable spawnedObject = new Moveable(WorldObject.getNextUid(), args[1], world, RandomGenerator.Singleton.randomPlanarRotation(), eWorldObjectGroup.eWorldObjectGroup_NearDynamic);
-            spawnedObject.ensureInScenarioBlock();
+            WorldPosition worldPos = WorldPosition.ClientToWorld(LocalPlayerManager.p.localCamera.transform.position + (LocalPlayerManager.p.localCamera.transform.forward * 3f));
+
+            Moveable spawnedObject = new Moveable(WorldObject.getNextUid(), args[1], worldPos, RandomGenerator.Singleton.randomPlanarRotation());
+            spawnedObject.EnsureInScenarioBlock();
+
             return "Spawned:" + args[1];
         }
 
@@ -252,9 +254,8 @@ namespace TDLHookLib
             DebugConsole.RegisterCommand("/target", new DebugConsole.DebugCommand(this.gettarget_callback));
             try
             {
-                Entity bin = Entity.GetEntityByName("prop_trash_wheelybin");
-
-                //bin.prefab.AddComponent<PhysHoldComp>();
+                //Entity ent = Entity.GetEntityByName("candle_lit");
+                //ent.prefab.AddComponent<HookFlickerComp>();
             }
             catch (Exception)
             { }
@@ -273,7 +274,7 @@ namespace TDLHookLib
             foreach (Category sub in CategoryReader.categories.Values)
             //foreach(SubCategory sub in CategoryReader.categories["town_biome"].subcats.Values)
             {
-                DebugConsole.Log(sub.name);
+                //DebugConsole.Log(sub.name);
             }
 
             //Camera cam = GameObject.FindObjectOfType<Camera>();
@@ -291,7 +292,7 @@ namespace TDLHookLib
             string compList = "";
             //foreach (Component c in Entity.GetEntityByName("bicycle_mountainbike").prefab.GetComponent<TDLTwoWheelVehicleMotor>().frontWheelNode.GetComponents<Component>())
             //foreach (GameObject c in Entity.GetEntityByName("item_wood_campfire_large").prefab.GetComponent<WoodFireControl>().fireParticleObjects)
-            foreach (Component c in Entity.GetEntityByName("zombie_medium").prefab.GetComponents<Component>())
+            foreach (Component c in Entity.GetEntityByName("house_suburban_1story_plain").prefab.GetComponents<Component>())
             {
                 compList += c.GetType().ToString() + "\n";
                 compList += c.name + "\n";
