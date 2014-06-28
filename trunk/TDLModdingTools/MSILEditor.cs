@@ -17,24 +17,17 @@ using System.Text.RegularExpressions;
 
 namespace TDLModdingTools
 {
-    public partial class Form1 : Form
+    public partial class MSILEditor : Form
     {
         private string openedFileName;
 
-        public Form1()
+        public MSILEditor()
         {
             InitializeComponent();
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            new Settings(Application.StartupPath);
-
-            if (Settings.Singleton().getSetting("IL_DASM_Path") == "")
-            {
-                SettingsDialog dia = new SettingsDialog();
-                dia.ShowDialog();
-            }
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
@@ -376,6 +369,12 @@ namespace TDLModdingTools
             }
 
             return methodContent;
+        }
+
+        private void modCompilerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            new ModCompiler().Show();
+            //this.Close();
         }
     }
 }

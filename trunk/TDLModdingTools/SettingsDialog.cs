@@ -25,6 +25,7 @@ namespace TDLModdingTools
             tdlPathBox.Text = set.getSetting("TDL_Path");
             MSILASMPathBox.Text = set.getSetting("IL_ASM_Path");
             MSILDASMPathBox.Text = set.getSetting("IL_DASM_Path");
+            toolComboBox.Text = set.getSetting("DefaultStart");
 
             return base.ShowDialog();
         }   
@@ -37,9 +38,11 @@ namespace TDLModdingTools
             set.setSetting("TDL_Path", tdlPathBox.Text.Substring(0, tdlPathBox.Text.LastIndexOf('\\') + 1), false);
             set.setSetting("IL_ASM_Path", MSILASMPathBox.Text, false);
             set.setSetting("IL_DASM_Path", MSILDASMPathBox.Text, false);
-            set.setSetting("IL_PEVerify_Path", tdlPathBox.Text.Substring(0, tdlPathBox.Text.LastIndexOf('\\') + 1) + "PEVerify.exe", true);
+            set.setSetting("IL_PEVerify_Path", "" + "PEVerify.exe", false);
+            set.setSetting("DefaultStart", toolComboBox.Text, true);
 
             MessageBox.Show("Settings Saved");
+            this.DialogResult = DialogResult.OK;
             this.Close();
         }
 

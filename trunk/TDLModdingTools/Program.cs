@@ -16,7 +16,27 @@ namespace TDLModdingTools
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+
+            new Settings(Application.StartupPath);
+
+            if (!Settings.Singleton().isSetup())
+            {
+                SettingsDialog dia = new SettingsDialog();
+                if(dia.ShowDialog() != DialogResult.OK)
+                {
+                    return;
+                }
+            }
+            switch (Settings.Singleton().getSetting("DefaultStart"))
+            {
+                case "MSIL Editor":
+                    Application.Run(new MSILEditor());
+                    break;
+                case "Mod Compiler":
+                default:
+                    Application.Run(new ModCompiler());
+                    break;
+            }
         }
     }
 }

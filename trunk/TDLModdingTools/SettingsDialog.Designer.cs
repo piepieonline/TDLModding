@@ -39,6 +39,8 @@
             this.label2 = new System.Windows.Forms.Label();
             this.MSILDASMPathBox = new System.Windows.Forms.TextBox();
             this.BrowseMSILDASMBut = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
+            this.toolComboBox = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // tdlPathBox
@@ -60,7 +62,7 @@
             // MSILPath
             // 
             this.MSILPath.AutoSize = true;
-            this.MSILPath.Location = new System.Drawing.Point(12, 41);
+            this.MSILPath.Location = new System.Drawing.Point(12, 78);
             this.MSILPath.Name = "MSILPath";
             this.MSILPath.Size = new System.Drawing.Size(35, 13);
             this.MSILPath.TabIndex = 3;
@@ -68,7 +70,7 @@
             // 
             // MSILASMPathBox
             // 
-            this.MSILASMPathBox.Location = new System.Drawing.Point(99, 58);
+            this.MSILASMPathBox.Location = new System.Drawing.Point(99, 95);
             this.MSILASMPathBox.Name = "MSILASMPathBox";
             this.MSILASMPathBox.Size = new System.Drawing.Size(148, 20);
             this.MSILASMPathBox.TabIndex = 2;
@@ -85,7 +87,7 @@
             // 
             // BrowseMSILASMBut
             // 
-            this.BrowseMSILASMBut.Location = new System.Drawing.Point(253, 56);
+            this.BrowseMSILASMBut.Location = new System.Drawing.Point(253, 93);
             this.BrowseMSILASMBut.Name = "BrowseMSILASMBut";
             this.BrowseMSILASMBut.Size = new System.Drawing.Size(75, 23);
             this.BrowseMSILASMBut.TabIndex = 5;
@@ -95,7 +97,7 @@
             // 
             // SaveBut
             // 
-            this.SaveBut.Location = new System.Drawing.Point(128, 110);
+            this.SaveBut.Location = new System.Drawing.Point(128, 216);
             this.SaveBut.Name = "SaveBut";
             this.SaveBut.Size = new System.Drawing.Size(75, 23);
             this.SaveBut.TabIndex = 6;
@@ -106,7 +108,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(21, 61);
+            this.label1.Location = new System.Drawing.Point(21, 98);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(58, 13);
             this.label1.TabIndex = 7;
@@ -115,7 +117,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(21, 87);
+            this.label2.Location = new System.Drawing.Point(21, 124);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(72, 13);
             this.label2.TabIndex = 9;
@@ -123,14 +125,14 @@
             // 
             // MSILDASMPathBox
             // 
-            this.MSILDASMPathBox.Location = new System.Drawing.Point(99, 84);
+            this.MSILDASMPathBox.Location = new System.Drawing.Point(99, 121);
             this.MSILDASMPathBox.Name = "MSILDASMPathBox";
             this.MSILDASMPathBox.Size = new System.Drawing.Size(148, 20);
             this.MSILDASMPathBox.TabIndex = 8;
             // 
             // BrowseMSILDASMBut
             // 
-            this.BrowseMSILDASMBut.Location = new System.Drawing.Point(253, 82);
+            this.BrowseMSILDASMBut.Location = new System.Drawing.Point(253, 119);
             this.BrowseMSILDASMBut.Name = "BrowseMSILDASMBut";
             this.BrowseMSILDASMBut.Size = new System.Drawing.Size(75, 23);
             this.BrowseMSILDASMBut.TabIndex = 10;
@@ -138,11 +140,33 @@
             this.BrowseMSILDASMBut.UseVisualStyleBackColor = true;
             this.BrowseMSILDASMBut.Click += new System.EventHandler(this.BrowseMSILDASMBut_Click);
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(12, 48);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(68, 13);
+            this.label3.TabIndex = 11;
+            this.label3.Text = "Default Tool:";
+            // 
+            // toolComboBox
+            // 
+            this.toolComboBox.FormattingEnabled = true;
+            this.toolComboBox.Items.AddRange(new object[] {
+            "Mod Compiler",
+            "MSIL Editor"});
+            this.toolComboBox.Location = new System.Drawing.Point(99, 45);
+            this.toolComboBox.Name = "toolComboBox";
+            this.toolComboBox.Size = new System.Drawing.Size(229, 21);
+            this.toolComboBox.TabIndex = 12;
+            // 
             // SettingsDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(340, 262);
+            this.Controls.Add(this.toolComboBox);
+            this.Controls.Add(this.label3);
             this.Controls.Add(this.BrowseMSILDASMBut);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.MSILDASMPathBox);
@@ -154,10 +178,12 @@
             this.Controls.Add(this.MSILASMPathBox);
             this.Controls.Add(this.lblTDLPath);
             this.Controls.Add(this.tdlPathBox);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "SettingsDialog";
             this.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Text = "Settings";
             this.TopMost = true;
             this.ResumeLayout(false);
@@ -178,5 +204,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox MSILDASMPathBox;
         private System.Windows.Forms.Button BrowseMSILDASMBut;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.ComboBox toolComboBox;
     }
 }

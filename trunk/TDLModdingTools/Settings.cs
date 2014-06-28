@@ -49,6 +49,16 @@ namespace TDLModdingTools
             return set;
         }
 
+        public bool isSetup()
+        {
+            if (setValues["TDL_Path"] == "")
+                return false;
+            if (setValues["DefaultStart"] == "MSIL" && setValues["IL_DASM_Path"] == "")
+                return false;
+
+            return true;
+        }
+
         public string getSetting(string settingName)
         {
             return setValues[settingName];
@@ -74,7 +84,7 @@ namespace TDLModdingTools
             setValues.Add("IL_ASM_Path", @"C:\Windows\Microsoft.NET\Framework\v2.0.50727\ilasm.exe");
             setValues.Add("IL_DASM_Path", @"C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Bin\ildasm.exe");
             setValues.Add("IL_PEVerify_Path", @"C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Bin\PEVerify.exe");
-
+            setValues.Add("DefaultStart", @"Mod Compiler");
             SaveSettings();
         }
 
