@@ -60,7 +60,7 @@ namespace TDLHookLib
                     XmlNodeList eleList = settingsDoc.SelectNodes("/modloader/loadorder/*");
 
                     List<Mod> modsTemp = new List<Mod>();
-                    
+
                     for (int i = 0; i < eleList.Count; i++)
                     {
                         if (!bool.Parse(eleList[i].SelectSingleNode("@enabled").Value))
@@ -73,7 +73,7 @@ namespace TDLHookLib
                             canRunScripts = bool.Parse(eleList[i].SelectSingleNode("@scripts").Value);
                         }
                         catch
-                        {}
+                        { }
 
                         string modPath = eleList[i].SelectSingleNode("text()").Value;
                         modDoc.Load(path + "\\" + modPath + "\\info.xml");
@@ -132,9 +132,6 @@ namespace TDLHookLib
                         return "";
                     case "ShowModMenu":
                         ModsMenu.activateGUI();
-                        break;
-                    case "InteractDown":
-                        pl.interactDown();
                         break;
                     default:
                         DebugOutput("No hook found for '" + command + "'");
@@ -225,29 +222,59 @@ namespace TDLHookLib
             return "Spawned:" + args[1];
         }
 
+        private object fire_callback(params string[] args)
+        {
+            string compList = "";
+            foreach (GameObject c in LocalPlayerManager.p.cursorTarget.unityGameObject.GetComponent<WoodFireControl>().fireParticleObjects)
+            //foreach (GameObject c in GameObject.FindGameObjectsWithTag("fireeffects"))
+            {
+                compList += c.GetType().ToString() + "\n";
+                compList += c.name + "\n";
+            }
+            File.WriteAllText(@"D:\fire.txt", compList);
+            return "done";
+        }
+
+        private object gettarget_callback(params string[] args)
+        {
+            if (LocalPlayerManager.p.cursorTarget != null && LocalPlayerManager.p.cursorTarget.unityGameObject != null)
+                return LocalPlayerManager.p.cursorTarget.unityGameObject.name;
+            return "";
+        }
+
         private void probingCode()
         {
             //Temporary - give us a spawner command, to test with
             DebugConsole.RegisterCommand("/spawn", new DebugConsole.DebugCommand(this.spawner_callback));
 
+            DebugConsole.RegisterCommand("/fire", new DebugConsole.DebugCommand(this.fire_callback));
+
+            DebugConsole.RegisterCommand("/target", new DebugConsole.DebugCommand(this.gettarget_callback));
             try
             {
                 Entity bin = Entity.GetEntityByName("prop_trash_wheelybin");
 
-                bin.prefab.AddComponent<PhysHoldComp>();
+                //bin.prefab.AddComponent<PhysHoldComp>();
             }
             catch (Exception)
             { }
 
             DebugOutput(GameObject.FindObjectsOfType<Camera>().Length.ToString());
 
-            foreach(Camera c in GameObject.FindObjectsOfType<Camera>())
+            foreach (Camera c in GameObject.FindObjectsOfType<Camera>())
             {
                 DebugOutput(c.name);
                 //c.renderingPath = RenderingPath.DeferredLighting;
             }
 
 
+            //"mixed_category"
+
+            foreach (Category sub in CategoryReader.categories.Values)
+            //foreach(SubCategory sub in CategoryReader.categories["town_biome"].subcats.Values)
+            {
+                DebugConsole.Log(sub.name);
+            }
 
             //Camera cam = GameObject.FindObjectOfType<Camera>();
             //cam.renderingPath = RenderingPath.DeferredLighting;
@@ -259,137 +286,36 @@ namespace TDLHookLib
 
             DebugConsole.Log(n);
 
-            Entity.GetEntityByName("bicycle_mountainbike").prefab.GetComponent<TDLTwoWheelVehicleMotor>().frontWheelNode.GetComponent<Transform>().position = new Vector3(0f, 1.0f, 0.6f);
+            //Entity.GetEntityByName("bicycle_mountainbike").prefab.GetComponent<TDLTwoWheelVehicleMotor>().frontWheelNode.GetComponent<Transform>().position = new Vector3(0f, 1.0f, 0.6f);
 
             string compList = "";
-            foreach (Component c in Entity.GetEntityByName("bicycle_mountainbike").prefab.GetComponent<TDLTwoWheelVehicleMotor>().frontWheelNode.GetComponents<Component>())
+            //foreach (Component c in Entity.GetEntityByName("bicycle_mountainbike").prefab.GetComponent<TDLTwoWheelVehicleMotor>().frontWheelNode.GetComponents<Component>())
+            //foreach (GameObject c in Entity.GetEntityByName("item_wood_campfire_large").prefab.GetComponent<WoodFireControl>().fireParticleObjects)
+            foreach (Component c in Entity.GetEntityByName("zombie_medium").prefab.GetComponents<Component>())
             {
-                compList += c.GetType().ToString();
+                compList += c.GetType().ToString() + "\n";
+                compList += c.name + "\n";
             }
-            File.WriteAllText(@"D:\bike.txt", compList);
+            File.WriteAllText(@"D:\TDLOut.txt", compList);
+
+
+
+            /*
+            Rigidbody rb = Entity.GetEntityByName("zombie_medium").prefab.AddComponent<Rigidbody>();
+            CapsuleCollider bc = Entity.GetEntityByName("zombie_medium").prefab.AddComponent<CapsuleCollider>();
+            rb.mass = 90.0f;
+            rb.drag = 0f;
+            rb.angularDrag = 0.5f;
+            bc.center = new Vector3(0f, 0f, 0f);
+            //bc.size = new Vector3(0.3f, 1.8f, 0.3f);
+            bc.radius = 0.3f;
+            bc.height = 1.8f;
+             */
+
+            //new LineRenderer().
+
 
             DebugOutput("Probe Finished");
         }
-
-        public void interactDown()
-        {
-            if (LocalPlayerManager.p.cursorTarget != null)
-            {
-                DebugOutput("Player grabbing at");
-            }
-        }
-    }
-
- 
-
-    //Candle test
-    /*
-    public class FlickerComp : MonoBehaviour
-    {
-        float maxInt = 0.02f;
-
-        void Update()
-        {
-            if (light.intensity > maxInt)
-                light.intensity -= 0.001f;
-            else
-                light.intensity += 0.001f;
-        }
-    }
-    */
-    //Collision manager
-    public class PhysHoldComp : MonoBehaviour
-    {
-        /*void OnCollisionEnter(Collision coll)
-        {
-            if (coll.gameObject.name.ToLower() == "terrain")
-                return;
-        }*/
-
-        //List<Rigidbody> rbs = new List<Rigidbody>();
-        //bool hasJoints = false;
-
-        //Dictionary<string, PhysicMaterial> mats = new Dictionary<string, PhysicMaterial>();
-        /*
-        void OnTriggerEnter(Collider col)
-        {
-            mats[col.name] = col.material;
-
-            col.material = (PhysicMaterial)Resources.Load("PhysicMaterials/Rubber");
-            col.material.bounceCombine = PhysicMaterialCombine.Minimum;
-
-            if (!rbs.Contains(col.rigidbody) && col.rigidbody.name.ToLower() != "terrain")
-                rbs.Add(col.rigidbody);
-        }
-
-        void OnTriggerExit(Collider col)
-        {
-            col.material = mats[col.name];
-            mats.Remove(col.name);
-            
-            if (rbs.Contains(col.rigidbody))
-                rbs.Remove(col.rigidbody);
-        }
-        */
-
-        bool pickedUp = false;
-        Dictionary<int, Collider> bodies = new Dictionary<int, Collider>();
-        Dictionary<int, PhysicMaterial> mats = new Dictionary<int, PhysicMaterial>();
-        void Update()
-        {
-            if (!pickedUp && LocalPlayerManager.p.tdlPlayer.isDragging && WorldObject.findByGameObject(this.gameObject) == LocalPlayerManager.p.tdlPlayer.carryObject)
-            {
-                foreach(Collider col in Physics.OverlapSphere(this.gameObject.rigidbody.position, 1f))
-                {
-                    bodies[col.GetInstanceID()] = col;
-                    mats[col.GetInstanceID()] = col.material;
-
-                    col.material = (PhysicMaterial)Resources.Load("PhysicMaterials/Rubber");
-                    col.material.bounceCombine = PhysicMaterialCombine.Minimum;
-                }
-                pickedUp = true;
-            }
-            else if (pickedUp && !LocalPlayerManager.p.tdlPlayer.isDragging)
-            {
-                foreach(int key in bodies.Keys)
-                {
-                    bodies[key].material = mats[key];
-                }
-            }
-      
-        }
-
-        /*
-                    if (LocalPlayerManager.p.tdlPlayer.isCarrying && WorldObject.findByGameObject(this.gameObject) == LocalPlayerManager.p.tdlPlayer.carryObject)
-            {
-
-                Bounds shrunkBounds = this.GetComponent<MeshCollider>().bounds;
-                //shrunkBounds.Expand(-0.3f);
-
-                DebugConsole.Log(this.GetComponent<MeshCollider>().bounds.size.ToString() + " > " + shrunkBounds.size.ToString());
-
-                foreach (ContactPoint cp in coll.contacts)
-                {
-                    if (shrunkBounds.Contains(cp.point))
-                    {
-                        DebugConsole.Log("Joint Made");
-                        FixedJoint joint = this.gameObject.AddComponent<FixedJoint>();
-                        joint.connectedBody = coll.rigidbody;
-                        joint.breakForce = Mathf.Infinity;
-                        joint.breakTorque = Mathf.Infinity;
-                        break;
-                    }
-                }
-            }
-            else
-            {
-                DebugConsole.Log("Joints Removed");
-                FixedJoint[] joints = this.gameObject.GetComponents<FixedJoint>();
-                for (int i = 0; i < joints.Length; i++)
-                {
-                    Destroy(joints[i]);
-                }
-            } 
-        */
     }
 }

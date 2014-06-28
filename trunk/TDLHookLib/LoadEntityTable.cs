@@ -194,6 +194,8 @@ namespace TDLHookLib
                                     if (rb == null)
                                         rb = newPrefab.AddComponent<Rigidbody>();
                                     rb.mass = float.Parse(eleList[i].SelectSingleNode("mass/text()").Value);
+                                    //rb.drag = 0f;
+                                    //rb.mass = 1f;
                                     break;
                                 case "boxCollider":
 
@@ -203,23 +205,33 @@ namespace TDLHookLib
                                     newCol = newPrefab.AddComponent<BoxCollider>();
                                     ((BoxCollider)newCol).center = new Vector3(float.Parse(center[0]), float.Parse(center[1]), float.Parse(center[2]));
                                     ((BoxCollider)newCol).size = new Vector3(float.Parse(size[0]), float.Parse(size[1]), float.Parse(size[2]));
+
                                     //Temp, this should be loaded elsewhere, somehow
-                                    newCol.material = (PhysicMaterial)Resources.Load("PhysicMaterials/Rubber");
-                                    newCol.material.bounceCombine = PhysicMaterialCombine.Minimum;
+                                    //newCol.material = (PhysicMaterial)Resources.Load("PhysicMaterials/Ice");
                                     break;
                                 case "sphereCollider":
                                     break;
+                                //Should only be used for statics
                                 case "meshCollider":
                                     Mesh colMesh = ObjImporter.ImportFile(workingPath + "/" + eleList[i].SelectSingleNode("mesh/text()").Value);
                                     newCol = newPrefab.AddComponent<MeshCollider>();
                                     ((MeshCollider)newCol).sharedMesh = colMesh;
                                     ((MeshCollider)newCol).convex = bool.Parse(eleList[i].SelectSingleNode("convex/text()").Value);
+                                    //newCol.material = (PhysicMaterial)Resources.Load("PhysicMaterials/Ice");
                                     break;
 
                                 default:
                                     TDLPlugin.DebugOutput("Unknown physics type: " + type);
                                     break;
                             }
+
+                            //If it has a enabled comp, check it
+                            try
+                            {
+                                if (!bool.Parse(eleList[i].SelectSingleNode("enabled/text()").Value))
+                                    newCol.isTrigger = true;
+                            }
+                            catch { }
 
                             try
                             {
@@ -243,7 +255,11 @@ namespace TDLHookLib
                         //Add all scripts to the entity
                         for (int i = 0; i < componentListXML.Count; i++)
                         {
-                            newPrefab.AddComponent(workingAssembly.GetType("Mod." + modName + "." + componentListXML[i].SelectSingleNode("text()").Value));//, true));
+                            Type loadedType = workingAssembly.GetType("Mod." + modName + "." + componentListXML[i].SelectSingleNode("text()").Value);
+                            //Init a setup member
+                            loadedType.InvokeMember("ModLoaderInit", BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Static | BindingFlags.InvokeMethod, null, null, new object[] { newEnt.entityName, workingPath });
+                            //Add the component
+                            newPrefab.AddComponent(loadedType);
                         }
                     }
                     catch
@@ -260,7 +276,7 @@ namespace TDLHookLib
 
         }
 
-        public static void objLoaded(GameObject[] loaded)
+        private static void objLoaded(GameObject[] loaded)
         {
             try
             {
@@ -290,7 +306,7 @@ namespace TDLHookLib
             }
         }
 
-        public static void loadNextObjFile()
+        private static void loadNextObjFile()
         {
             //Load the next object, remove it from the list
             FileIO.Load3d(loadList[0], false, false, objLoadedCallback);
