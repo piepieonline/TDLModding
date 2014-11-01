@@ -12,4 +12,12 @@
     <key>IL_DASM_Path</key>
     <value>C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Bin\ildasm.exe</value>
   </SettingsEntry>
+  <SettingsEntry>
+    <key>IL_PEVerify_Path</key>
+    <value>PEVerify.exe</value>
+  </SettingsEntry>
+  <SettingsEntry>
+    <key>DefaultStart</key>
+    <value>MSIL Editor</value>
+  </SettingsEntry>
 </ArrayOfSettingsEntry>

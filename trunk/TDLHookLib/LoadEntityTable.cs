@@ -23,7 +23,8 @@ namespace TDLHookLib
         private static FileIO.LoadCallback objLoadedCallback = new FileIO.LoadCallback(objLoaded);
 
         private static List<ModelEntityMapping> objToEntity = new List<ModelEntityMapping>();
-        //private static List<>
+
+        private static Dictionary<string, GameObject> prefabs = new Dictionary<string, GameObject>();
 
         //private static Dictionary<string, Type> scriptComponents = new Dictionary<string, Type>();
 
@@ -70,6 +71,17 @@ namespace TDLHookLib
                 loadNextObjFile();
         }
 
+        public static GameObject getPrefabObject(string prefab)
+        {
+            foreach (String s in prefabs.Keys.ToArray<String>())
+                DebugConsole.Log(s);
+            
+            if (prefabs.ContainsKey(prefab))
+                return prefabs[prefab];
+            else
+                return null;
+        }
+
         #region EntityTable
         public void loadModEntities(string workingPath, string modName, Assembly workingAssembly)
         {
@@ -95,16 +107,17 @@ namespace TDLHookLib
                     {
                         TDLPlugin.DebugOutput("Unknown entity, creating: " + entityName);
                         //Create the entity
-                        XmlDocument xmlDocument = new XmlDocument();
+                        XmlDocument xmlDocument = new XmlDocument();        
                         //Load the Xml
                         xmlDocument.LoadXml("<entity class='" + entityDoc.SelectSingleNode("/entity/properties/class/text()").Value + "' name='" + entityName + "' near='yes' cache='3' ambient='yes' />");
                         newEnt = new Entity(xmlDocument.DocumentElement);
+
                         //Create the entity prefab
                         newPrefab = new GameObject(entityName + "_prefab");
                     }
                     else
                     {
-                        newPrefab = newEnt.prefab;
+                        newPrefab = newEnt._prefab;
                     }
 
                     //Entity properties
@@ -147,6 +160,7 @@ namespace TDLHookLib
                             try
                             {
                                 newPrefab.GetComponent<LODGroup>().enabled = false;
+
                             }
                             catch
                             { }
@@ -188,7 +202,7 @@ namespace TDLHookLib
                             if (Boolean.Parse(entityDoc.SelectSingleNode("/entity/physics/@replace").Value))
                             {
                                 foreach(Collider col in newPrefab.GetComponents<Collider>())
-                                    Destroy.Destroy(col);
+                                    UnityEngine.Object.Destroy(col);
                             }
                         }
                         catch (System.Xml.XPath.XPathException)
@@ -286,7 +300,17 @@ namespace TDLHookLib
                     }
 
                     //Reassign the prefab
-                    newEnt.prefab = newPrefab;
+                    newEnt._prefab = newPrefab;
+                    prefabs.Add(newPrefab.name, newPrefab);
+
+                    DebugConsole.Log("Has no prefab:" + newEnt.hasNoPrefab);
+                    DebugConsole.Log("Test prefab:" + newEnt._prefab.name);
+
+                    newEnt.hasNoPrefab = false;
+
+                    newEnt.prefabName = newEnt._prefab.name;
+
+                    DebugConsole.Log("Mod prefab:" + newEnt.prefab.name);
                 }
             }
             //Assembly assemble = Assembly.LoadFile(@"D:\SteamLibrary\SteamApps\common\The Dead Linger\TDL_Data\Mods\RotateLock\RotateLock.dll");
@@ -309,7 +333,7 @@ namespace TDLHookLib
                 Entity.GetEntityByName(objToEntity[0].entity).prefab.AddComponent<MeshRenderer>().material = loaded[0].GetComponent<MeshRenderer>().material;
 
                 //Destroy the created GameObject, and remove the head of the list
-                Destroy.Destroy(loaded[0]);
+                UnityEngine.Object.Destroy(loaded[0]);
                 objToEntity.RemoveAt(0);
 
                 //If we have more than 1 object to load, start loading again

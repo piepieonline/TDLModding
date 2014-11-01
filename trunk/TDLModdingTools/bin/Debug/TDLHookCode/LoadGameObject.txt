@@ -1,0 +1,43 @@
+ .method public hidebysig static class [UnityEngine]UnityEngine.GameObject 
+          LoadGameObject(string prefabName) cil managed
+  {
+    // Code size       76 (0x4c)
+    .maxstack  9
+    .locals init (class [UnityEngine]UnityEngine.GameObject V_0)
+    IL_0000:  ldstr      "LoadGameObject: "
+    IL_0005:  ldarg.0
+    IL_0006:  call       string [mscorlib]System.String::Concat(string,
+                                                                string)
+    IL_000b:  call       void DebugConsole::LogToFile(object)
+    IL_0010:  ldarg.0
+    IL_0011:  ldstr      "none"
+    IL_0016:  call       bool [mscorlib]System.String::op_Equality(string,
+                                                                   string)
+    IL_001b:  brfalse    IL_0022
+
+    IL_0020:  ldnull
+    IL_0021:  ret
+
+    IL_0022:  ldarg.0
+    IL_0023:  call       class [UnityEngine]UnityEngine.Object [UnityEngine]UnityEngine.Resources::Load(string)
+    IL_0028:  isinst     [UnityEngine]UnityEngine.GameObject
+    IL_002d:  stloc.0
+    IL_002e:  ldloc.0
+    IL_002f:  call       bool [UnityEngine]UnityEngine.Object::op_Implicit(class [UnityEngine]UnityEngine.Object)
+    IL_0034:  brtrue     IL_0056
+
+    IL_0039:  ldstr      "Unknown prefab "
+    IL_003e:  ldarg.0
+    IL_003f:  call       string [mscorlib]System.String::Concat(string,
+                                                                string)
+    IL_0044:  call       object DebugConsole::LogWarning(object)
+    IL_0049:  pop
+    
+    IL_004a:  nop
+    IL_004b:  ldarg.0
+    IL_0050:  call       class [UnityEngine]UnityEngine.GameObject TDLHookClass::LoadPrefab(string)
+    IL_0051:  stloc.0
+    
+    IL_0056:  ldloc.0
+    IL_0057:  ret
+  } // end of method Entity::LoadGameObject

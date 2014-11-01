@@ -2,4 +2,6 @@
 
 NPCPhysicsState collidableByThis()
 
-Redo the Obj importing, eventually
+Redo the Obj importing, eventually, to allow for better mesh importing (Submeshes etc)
+
+Add LODs for meshes

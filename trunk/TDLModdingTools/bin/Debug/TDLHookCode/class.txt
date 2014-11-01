@@ -6,7 +6,7 @@
   .method public hidebysig static object 
           LoadTDLHook(object[] args) cil managed
   {
-    // Code size       145 (0x91)
+    // Code size       171 (0xab)
     .maxstack  5
     .locals init (string V_0,
              string V_1,
@@ -20,78 +20,77 @@
              object V_9,
              object[] V_10,
              bool V_11)
-      ldsfld object TDLHookClass::hookMethod
-      ldnull
-      ceq
-      ldc.i4.0
-      ceq
-      stloc.s V_11
-      ldloc.s V_11
-      brtrue.s _NOTNULL
-      
-      nop
-      call       class [mscorlib]System.Reflection.Assembly [mscorlib]System.Reflection.Assembly::GetExecutingAssembly()
-      callvirt   instance string [mscorlib]System.Reflection.Assembly::get_CodeBase()
-      ldc.i4.8
-      callvirt   instance string [mscorlib]System.String::Substring(int32)
-      stloc.0
-      ldloc.0
-      ldc.i4.0
-      ldloc.0
-      ldstr      "/"
-      callvirt   instance int32 [mscorlib]System.String::LastIndexOf(string)
-      callvirt   instance string [mscorlib]System.String::Substring(int32,
+    IL_0000:  ldsfld     object TDLHookClass::hookMethod
+    IL_0005:  ldnull
+    IL_0006:  ceq
+    IL_0008:  ldc.i4.0
+    IL_0009:  ceq
+    IL_000b:  stloc.s    V_11
+    IL_000d:  ldloc.s    V_11
+    IL_000f:  brtrue.s   IL_0086
+
+    IL_0011:  nop
+    IL_0012:  call       class [mscorlib]System.Reflection.Assembly [mscorlib]System.Reflection.Assembly::GetExecutingAssembly()
+    IL_0017:  callvirt   instance string [mscorlib]System.Reflection.Assembly::get_CodeBase()
+    IL_001c:  ldc.i4.8
+    IL_001d:  callvirt   instance string [mscorlib]System.String::Substring(int32)
+    IL_0022:  stloc.0
+    IL_0023:  ldloc.0
+    IL_0024:  ldc.i4.0
+    IL_0025:  ldloc.0
+    IL_0026:  ldstr      "/"
+    IL_002b:  callvirt   instance int32 [mscorlib]System.String::LastIndexOf(string)
+    IL_0030:  callvirt   instance string [mscorlib]System.String::Substring(int32,
                                                                             int32)
-      stloc.0
-      ldloc.0
-      ldstr      "/TDLHookLib.dll"
-      call       string [mscorlib]System.String::Concat(object,
+    IL_0035:  stloc.0
+    IL_0036:  ldloc.0
+    IL_0037:  ldstr      "/TDLHookLib.dll"
+    IL_003c:  call       string [mscorlib]System.String::Concat(object,
                                                                 object)
-      stloc.1
-      ldstr      "TDLHookLib.TDLPlugin"
-      stloc.2
-      ldstr      "HookTDL"
-      stloc.3
-      ldloc.1
-      call       class [mscorlib]System.Reflection.Assembly [mscorlib]System.Reflection.Assembly::LoadFile(string)
-      stloc.s    V_4
-      ldloc.s    V_4
-      ldloc.2
-      callvirt   instance class [mscorlib]System.Type [mscorlib]System.Reflection.Assembly::GetType(string)
-      stloc.s    V_5
-      ldloc.s    V_5
-      ldloc.3
-      callvirt   instance class [mscorlib]System.Reflection.MethodInfo [mscorlib]System.Type::GetMethod(string)
-      stsfld     class [mscorlib]System.Reflection.MethodInfo TDLHookClass::methodInfo
-      ldsfld     class [mscorlib]System.Reflection.MethodInfo TDLHookClass::methodInfo
-      callvirt   instance class [mscorlib]System.Reflection.ParameterInfo[] [mscorlib]System.Reflection.MethodBase::GetParameters()
-      stloc.s    V_7
-      ldloc.s    V_5
-      ldnull
-      call       object [mscorlib]System.Activator::CreateInstance(class [mscorlib]System.Type,
+    IL_0041:  stloc.1
+    IL_0042:  ldstr      "TDLHookLib.TDLPlugin"
+    IL_0047:  stloc.2
+    IL_0048:  ldstr      "HookTDL"
+    IL_004d:  stloc.3
+    IL_004e:  ldloc.1
+    IL_004f:  call       class [mscorlib]System.Reflection.Assembly [mscorlib]System.Reflection.Assembly::LoadFile(string)
+    IL_0054:  stloc.s    V_4
+    IL_0056:  ldloc.s    V_4
+    IL_0058:  ldloc.2
+    IL_0059:  callvirt   instance class [mscorlib]System.Type [mscorlib]System.Reflection.Assembly::GetType(string)
+    IL_005e:  stloc.s    V_5
+    IL_0060:  ldloc.s    V_5
+    IL_0062:  ldloc.3
+    IL_0063:  callvirt   instance class [mscorlib]System.Reflection.MethodInfo [mscorlib]System.Type::GetMethod(string)
+    IL_0068:  stsfld     class [mscorlib]System.Reflection.MethodInfo TDLHookClass::methodInfo
+    IL_006d:  ldsfld     class [mscorlib]System.Reflection.MethodInfo TDLHookClass::methodInfo
+    IL_0072:  callvirt   instance class [mscorlib]System.Reflection.ParameterInfo[] [mscorlib]System.Reflection.MethodBase::GetParameters()
+    IL_0077:  stloc.s    V_7
+    IL_0079:  ldloc.s    V_5
+    IL_007b:  ldnull
+    IL_007c:  call       object [mscorlib]System.Activator::CreateInstance(class [mscorlib]System.Type,
                                                                            object[])
-      stsfld     object TDLHookClass::hookMethod
-      _NOTNULL:
-      ldsfld     class [mscorlib]System.Reflection.MethodInfo TDLHookClass::methodInfo
-      ldsfld     object TDLHookClass::hookMethod
-      ldc.i4.1
-      newarr     [mscorlib]System.Object
-      stloc.s    V_10
-      ldloc.s    V_10
-      ldc.i4.0
-      ldarg.0
-      stelem.ref
-      ldloc.s    V_10
-      callvirt   instance object [mscorlib]System.Reflection.MethodBase::Invoke(object,
+    IL_0081:  stsfld     object TDLHookClass::hookMethod
+    IL_0086:  ldsfld     class [mscorlib]System.Reflection.MethodInfo TDLHookClass::methodInfo
+    IL_008b:  ldsfld     object TDLHookClass::hookMethod
+    IL_0090:  ldc.i4.1
+    IL_0091:  newarr     [mscorlib]System.Object
+    IL_0096:  stloc.s    V_10
+    IL_0098:  ldloc.s    V_10
+    IL_009a:  ldc.i4.0
+    IL_009b:  ldarg.0
+    IL_009c:  stelem.ref
+    IL_009d:  ldloc.s    V_10
+    IL_009f:  callvirt   instance object [mscorlib]System.Reflection.MethodBase::Invoke(object,
                                                                                         object[])
-      stloc.s    V_9
-      br.s       IL_008e
-      IL_008e:
-      ldloc.s    V_9
-      ret
+    IL_00a4:  stloc.s    V_9
+    IL_00a6:  br.s       IL_00a8
+
+    IL_00a8:  ldloc.s    V_9
+    IL_00aa:  ret
   } // end of method TDLHookClass::LoadTDLHook
 
-  .method public hidebysig static void  ShowModsMenu() cil managed
+  .method public hidebysig static void  LoadEntityTable() cil managed
   {
     // Code size       24 (0x18)
     .maxstack  5
@@ -102,12 +101,66 @@
     IL_0007:  stloc.0
     IL_0008:  ldloc.0
     IL_0009:  ldc.i4.0
-    IL_000a:  ldstr      "ShowModMenu"
+    IL_000a:  ldstr      "loadEntityTable"
     IL_000f:  stelem.ref
     IL_0010:  ldloc.0
     IL_0011:  call       object TDLHookClass::LoadTDLHook(object[])
     IL_0016:  pop
     IL_0017:  ret
+  } // end of method TDLHookClass::LoadEntityTable
+
+  .method public hidebysig static class IBodyMenu 
+          ShowModsMenu() cil managed
+  {
+    // Code size       32 (0x20)
+    .maxstack  3
+    .locals init ([0] class IBodyMenu CS$1$0000,
+             [1] object[] CS$0$0001)
+    IL_0000:  nop
+    IL_0001:  ldc.i4.1
+    IL_0002:  newarr     [mscorlib]System.Object
+    IL_0007:  stloc.1
+    IL_0008:  ldloc.1
+    IL_0009:  ldc.i4.0
+    IL_000a:  ldstr      "ShowModMenu"
+    IL_000f:  stelem.ref
+    IL_0010:  ldloc.1
+    IL_0011:  call       object TDLHookClass::LoadTDLHook(object[])
+    IL_0016:  castclass  IBodyMenu
+    IL_001b:  stloc.0
+    IL_001c:  br.s       IL_001e
+
+    IL_001e:  ldloc.0
+    IL_001f:  ret
   } // end of method TDLHookClass::ShowModsMenu
+
+  .method public hidebysig static class [UnityEngine]UnityEngine.GameObject 
+          LoadPrefab(string preName) cil managed
+  {
+    // Code size       36 (0x24)
+    .maxstack  3
+    .locals init ([0] class [UnityEngine]UnityEngine.GameObject CS$1$0000,
+             [1] object[] CS$0$0001)
+    IL_0000:  nop
+    IL_0001:  ldc.i4.2
+    IL_0002:  newarr     [mscorlib]System.Object
+    IL_0007:  stloc.1
+    IL_0008:  ldloc.1
+    IL_0009:  ldc.i4.0
+    IL_000a:  ldstr      "LoadPrefab"
+    IL_000f:  stelem.ref
+    IL_0010:  ldloc.1
+    IL_0011:  ldc.i4.1
+    IL_0012:  ldarg.0
+    IL_0013:  stelem.ref
+    IL_0014:  ldloc.1
+    IL_0015:  call       object TDLHookClass::LoadTDLHook(object[])
+    IL_001a:  castclass  [UnityEngine]UnityEngine.GameObject
+    IL_001f:  stloc.0
+    IL_0020:  br.s       IL_0022
+
+    IL_0022:  ldloc.0
+    IL_0023:  ret
+  } // end of method TDLHookClass::LoadPrefab
 
 } // end of class TDLHookClass

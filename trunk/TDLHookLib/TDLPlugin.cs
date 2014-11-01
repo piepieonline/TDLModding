@@ -96,7 +96,7 @@ namespace TDLHookLib
                     pl = new TDLPlugin();
 
                     //Add the ModsMenu menu
-                    TDLMenuCommon.Singleton.gameObject.AddComponent<ModsMenu>();
+                    //TDLMenuCommon.Singleton.gameObject.AddComponent<ModsMenu>();
 
                     //Check settings, such as TextAsset dumps
                     if (!debugging)
@@ -131,8 +131,13 @@ namespace TDLHookLib
 
                         return "";
                     case "ShowModMenu":
-                        ModsMenu.activateGUI();
-                        break;
+                        if (!BodyMenuMods.singleton)
+                            Component.FindObjectOfType<StartMenu>().gameObject.AddComponent<BodyMenuMods>();
+                        return BodyMenuMods.singleton;
+                    case "LoadPrefab":
+                        DebugOutput("Prefab: '" + (string)args[1] + "'");
+
+                        return LoadEntityTable.getPrefabObject((string)args[1]);
                     default:
                         DebugOutput("No hook found for '" + command + "'");
                         break;
@@ -216,7 +221,7 @@ namespace TDLHookLib
         {
             if (args.Length != 2)
                 return "Must have an object (E.G. 'bicycle_mountainbike') as a parameter.";
-            WorldPosition worldPos = WorldPosition.ClientToWorld(LocalPlayerManager.p.localCamera.transform.position + (LocalPlayerManager.p.localCamera.transform.forward * 3f));
+            WorldPosition worldPos = WorldPosition.ClientToWorld(LocalPlayerManager.p.camera.transform.position + (LocalPlayerManager.p.camera.transform.forward * 3f));
 
             Moveable spawnedObject = new Moveable(WorldObject.getNextUid(), args[1], worldPos, RandomGenerator.Singleton.randomPlanarRotation());
             spawnedObject.EnsureInScenarioBlock();
@@ -247,7 +252,7 @@ namespace TDLHookLib
         private void probingCode()
         {
             //Temporary - give us a spawner command, to test with
-            DebugConsole.RegisterCommand("/spawn", new DebugConsole.DebugCommand(this.spawner_callback));
+            //DebugConsole.RegisterCommand("/spawn", new DebugConsole.DebugCommand(this.spawner_callback));
 
             DebugConsole.RegisterCommand("/fire", new DebugConsole.DebugCommand(this.fire_callback));
 
@@ -292,15 +297,20 @@ namespace TDLHookLib
             string compList = "";
             //foreach (Component c in Entity.GetEntityByName("bicycle_mountainbike").prefab.GetComponent<TDLTwoWheelVehicleMotor>().frontWheelNode.GetComponents<Component>())
             //foreach (GameObject c in Entity.GetEntityByName("item_wood_campfire_large").prefab.GetComponent<WoodFireControl>().fireParticleObjects)
-            foreach (Component c in Entity.GetEntityByName("house_suburban_1story_plain").prefab.GetComponents<Component>())
+            foreach (Component c in Entity.GetEntityByName("candle_unlit").prefab.GetComponents<Component>())
             {
                 compList += c.GetType().ToString() + "\n";
-                compList += c.name + "\n";
             }
             File.WriteAllText(@"D:\TDLOut.txt", compList);
 
-
-
+            //Dammit. They are using unity lod groups
+            
+            foreach (LODGroup c in Entity.GetEntityByName("house_suburban_1story_plain").prefab.GetComponents<LODGroup>())
+            {
+                DebugConsole.Log("LODs: " + c.lodCount.ToString());
+            }
+            
+            
             /*
             Rigidbody rb = Entity.GetEntityByName("zombie_medium").prefab.AddComponent<Rigidbody>();
             CapsuleCollider bc = Entity.GetEntityByName("zombie_medium").prefab.AddComponent<CapsuleCollider>();
@@ -314,7 +324,6 @@ namespace TDLHookLib
              */
 
             //new LineRenderer().
-
 
             DebugOutput("Probe Finished");
         }

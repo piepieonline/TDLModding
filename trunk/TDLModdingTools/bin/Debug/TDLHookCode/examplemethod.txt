@@ -1,78 +1,171 @@
   .method public hidebysig instance void 
-          loadTable() cil managed
+          LoadTable() cil managed
   {
-    // Code size       196 (0xc4)
-    .maxstack  3
-    .locals init (string V_0,
-             object[] V_1)
+    // Code size       410 (0x19a)
+    .maxstack  45
+    .locals init (class [UnityEngine]UnityEngine.TextAsset[] V_0,
+             class [UnityEngine]UnityEngine.TextAsset V_1,
+             class [UnityEngine]UnityEngine.TextAsset[] V_2,
+             int32 V_3,
+             class [UnityEngine]UnityEngine.TextAsset V_4,
+             class [UnityEngine]UnityEngine.TextAsset[] V_5,
+             int32 V_6,
+             string V_7,
+             class [mscorlib]System.Exception V_8)
     IL_0000:  ldsfld     class [mscorlib]System.Collections.Generic.Dictionary`2<uint16,class Entity> Entity::entities
-    IL_0005:  callvirt   instance void class [mscorlib]System.Collections.Generic.Dictionary`2<uint16,class Entity>::Clear()
-    IL_000a:  ldarg.0
-    IL_000b:  ldfld      class [UnityEngine]UnityEngine.TextAsset EntityTable::entityFile
-    IL_0010:  callvirt   instance string [UnityEngine]UnityEngine.Object::get_name()
-    IL_0015:  stsfld     string XMLHelpers::currentFileName
-    IL_001a:  ldarg.0
-    IL_001b:  ldarg.0
-    IL_001c:  ldfld      class [UnityEngine]UnityEngine.TextAsset EntityTable::entityFile
-    IL_0021:  callvirt   instance string [UnityEngine]UnityEngine.TextAsset::get_text()
-    IL_0026:  call       instance void EntityTable::loadFromString(string)
-    IL_002b:  ldarg.0
-    IL_002c:  ldfld      class [UnityEngine]UnityEngine.TextAsset EntityTable::entityAimFile
-    IL_0031:  callvirt   instance string [UnityEngine]UnityEngine.Object::get_name()
-    IL_0036:  stsfld     string XMLHelpers::currentFileName
-    IL_003b:  call       bool EntityTable::ensureAimXmlFileName()
-    IL_0040:  brfalse    IL_008c
+    IL_0005:  callvirt   instance int32 class [mscorlib]System.Collections.Generic.Dictionary`2<uint16,class Entity>::get_Count()
+    IL_000a:  ldc.i4.0
+    IL_000b:  ble        IL_0011
+
+    IL_0010:  ret
+
+    IL_0011:  ldsfld     class [mscorlib]System.Collections.Generic.Dictionary`2<uint16,class Entity> Entity::entities
+    IL_0016:  callvirt   instance void class [mscorlib]System.Collections.Generic.Dictionary`2<uint16,class Entity>::Clear()
+    IL_001b:  ldstr      "Entities"
+    IL_0020:  call       !!0[] [UnityEngine]UnityEngine.Resources::LoadAll<class [UnityEngine]UnityEngine.TextAsset>(string)
+    IL_0025:  stloc.0
+    IL_0026:  ldstr      "Entities files count: "
+    IL_002b:  ldloc.0
+    IL_002c:  ldlen
+    IL_002d:  conv.i4
+    IL_002e:  box        [mscorlib]System.Int32
+    IL_0033:  call       string [mscorlib]System.String::Concat(object,
+                                                                object)
+    IL_0038:  call       void [UnityEngine]UnityEngine.Debug::Log(object)
+    IL_003d:  ldloc.0
+    IL_003e:  stloc.2
+    IL_003f:  ldc.i4.0
+    IL_0040:  stloc.3
+    IL_0041:  br         IL_008f
+
+    IL_0046:  ldloc.2
+    IL_0047:  ldloc.3
+    IL_0048:  ldelem.ref
+    IL_0049:  stloc.1
+    IL_004a:  ldloc.1
+    IL_004b:  callvirt   instance string [UnityEngine]UnityEngine.Object::get_name()
+    IL_0050:  ldstr      "_predefines"
+    IL_0055:  call       bool [mscorlib]System.String::op_Equality(string,
+                                                                   string)
+    IL_005a:  brfalse    IL_008b
+
+    IL_005f:  ldstr      "Loading entity xml "
+    IL_0064:  ldloc.1
+    IL_0065:  callvirt   instance string [UnityEngine]UnityEngine.Object::get_name()
+    IL_006a:  call       string [mscorlib]System.String::Concat(string,
+                                                                string)
+    IL_006f:  call       object DebugConsole::Log(object)
+    IL_0074:  pop
+    IL_0075:  ldloc.1
+    IL_0076:  callvirt   instance string [UnityEngine]UnityEngine.Object::get_name()
+    IL_007b:  stsfld     string XMLHelpers::currentFileName
+    IL_0080:  ldloc.1
+    IL_0081:  callvirt   instance string [UnityEngine]UnityEngine.TextAsset::get_text()
+    IL_0086:  call       void EntityTable::loadFromString(string)
+    IL_008b:  ldloc.3
+    IL_008c:  ldc.i4.1
+    IL_008d:  add
+    IL_008e:  stloc.3
+    IL_008f:  ldloc.3
+    IL_0090:  ldloc.2
+    IL_0091:  ldlen
+    IL_0092:  conv.i4
+    IL_0093:  blt        IL_0046
+
+    IL_0098:  ldloc.0
+    IL_0099:  stloc.s    V_5
+    IL_009b:  ldc.i4.0
+    IL_009c:  stloc.s    V_6
+    IL_009e:  br         IL_00f5
+
+    IL_00a3:  ldloc.s    V_5
+    IL_00a5:  ldloc.s    V_6
+    IL_00a7:  ldelem.ref
+    IL_00a8:  stloc.s    V_4
+    IL_00aa:  ldloc.s    V_4
+    IL_00ac:  callvirt   instance string [UnityEngine]UnityEngine.Object::get_name()
+    IL_00b1:  ldstr      "_predefines"
+    IL_00b6:  call       bool [mscorlib]System.String::op_Inequality(string,
+                                                                     string)
+    IL_00bb:  brfalse    IL_00ef
+
+    IL_00c0:  ldstr      "Loading entity xml "
+    IL_00c5:  ldloc.s    V_4
+    IL_00c7:  callvirt   instance string [UnityEngine]UnityEngine.Object::get_name()
+    IL_00cc:  call       string [mscorlib]System.String::Concat(string,
+                                                                string)
+    IL_00d1:  call       object DebugConsole::Log(object)
+    IL_00d6:  pop
+    IL_00d7:  ldloc.s    V_4
+    IL_00d9:  callvirt   instance string [UnityEngine]UnityEngine.Object::get_name()
+    IL_00de:  stsfld     string XMLHelpers::currentFileName
+    IL_00e3:  ldloc.s    V_4
+    IL_00e5:  callvirt   instance string [UnityEngine]UnityEngine.TextAsset::get_text()
+    IL_00ea:  call       void EntityTable::loadFromString(string)
+    IL_00ef:  ldloc.s    V_6
+    IL_00f1:  ldc.i4.1
+    IL_00f2:  add
+    IL_00f3:  stloc.s    V_6
+    IL_00f5:  ldloc.s    V_6
+    IL_00f7:  ldloc.s    V_5
+    IL_00f9:  ldlen
+    IL_00fa:  conv.i4
+    IL_00fb:  blt        IL_00a3
+
+    IL_0100:  ldarg.0
+    IL_0101:  ldfld      class [UnityEngine]UnityEngine.TextAsset EntityTable::entityAimFile
+    IL_0106:  callvirt   instance string [UnityEngine]UnityEngine.Object::get_name()
+    IL_010b:  stsfld     string XMLHelpers::currentFileName
+    IL_0110:  call       bool EntityTable::ensureAimXmlFileName()
+    IL_0115:  brfalse    IL_017a
 
     .try
     {
-      IL_0045:  ldsfld     string EntityTable::aimXmlFileFullName
-      IL_004a:  call       string [mscorlib]System.IO.File::ReadAllText(string)
-      IL_004f:  stloc.0
-      IL_0050:  ldloc.0
-      IL_0051:  callvirt   instance int32 [mscorlib]System.String::get_Length()
-      IL_0056:  ldc.i4.0
-      IL_0057:  ble        IL_0081
+      IL_011a:  ldsfld     string EntityTable::aimXmlFileFullName
+      IL_011f:  call       string [mscorlib]System.IO.File::ReadAllText(string)
+      IL_0124:  stloc.s    V_7
+      IL_0126:  ldloc.s    V_7
+      IL_0128:  callvirt   instance int32 [mscorlib]System.String::get_Length()
+      IL_012d:  ldc.i4.0
+      IL_012e:  ble        IL_0158
 
-      IL_005c:  ldstr      "entity_table_aim_1"
-      IL_0061:  ldstr      "Loaded aim.xml data from SVN project location. "
-      IL_0066:  ldsfld     string EntityTable::aimXmlFileFullName
-      IL_006b:  call       string [mscorlib]System.String::Concat(string,
+      IL_0133:  ldstr      "entity_table_aim_1"
+      IL_0138:  ldstr      "Loaded aim.xml data from SVN project location. "
+      IL_013d:  ldsfld     string EntityTable::aimXmlFileFullName
+      IL_0142:  call       string [mscorlib]System.String::Concat(string,
                                                                   string)
-      IL_0070:  call       void TDLLogging::LogRuntimeInfo(string,
+      IL_0147:  call       void TDLLogging::LogRuntimeInfo(string,
                                                            string)
-      IL_0075:  ldarg.0
-      IL_0076:  ldloc.0
-      IL_0077:  call       instance void EntityTable::loadAimFromString(string)
-      IL_007c:  leave      IL_00c3
+      IL_014c:  ldloc.s    V_7
+      IL_014e:  call       void EntityTable::loadAimFromString(string)
+      IL_0153:  leave      IL_019f
 
-      IL_0081:  leave      IL_008c
+      IL_0158:  leave      IL_017a
 
     }  // end .try
-    catch [mscorlib]System.Object 
+    catch [mscorlib]System.Exception 
     {
-      IL_0086:  pop
-      IL_0087:  leave      IL_008c
+      IL_015d:  stloc.s    V_8
+      IL_015f:  ldstr      "LoadTable: "
+      IL_0164:  ldloc.s    V_8
+      IL_0166:  callvirt   instance string [mscorlib]System.Exception::get_Message()
+      IL_016b:  call       string [mscorlib]System.String::Concat(string,
+                                                                  string)
+      IL_0170:  call       void [UnityEngine]UnityEngine.Debug::Log(object)
+      IL_0175:  leave      IL_017a
 
     }  // end handler
-    IL_008c:  ldstr      "entity_table_aim_2"
-    IL_0091:  ldstr      "Loaded aim.xml data from normal TDL.exe bundle."
-    IL_0096:  call       void TDLLogging::LogRuntimeInfo(string,
+    IL_017a:  ldstr      "entity_table_aim_2"
+    IL_017f:  ldstr      "Loaded aim.xml data from normal TDL.exe bundle."
+    IL_0184:  call       void TDLLogging::LogRuntimeInfo(string,
                                                          string)
-    IL_009b:  ldarg.0
-    IL_009c:  ldarg.0
-    IL_009d:  ldfld      class [UnityEngine]UnityEngine.TextAsset EntityTable::entityAimFile
-    IL_00a2:  callvirt   instance string [UnityEngine]UnityEngine.TextAsset::get_text()
-    IL_00a7:  call       instance void EntityTable::loadAimFromString(string)
-    IL_00ac:  nop
-    IL_00ad:  ldc.i4.1
-    IL_00ae:  newarr     [mscorlib]System.Object
-    IL_00b3:  stloc.1
-    IL_00b4:  ldloc.1
-    IL_00b5:  ldc.i4.0
-    IL_00b6:  ldstr      "loadEntityTable"
-    IL_00bb:  stelem.ref
-    IL_00bc:  ldloc.1
-    IL_00bd:  call       object TDLHookClass::LoadTDLHook(object[])
-    IL_00c2:  pop
-    IL_00c3:  ret
-  }
+    IL_0189:  ldarg.0
+    IL_018a:  ldfld      class [UnityEngine]UnityEngine.TextAsset EntityTable::entityAimFile
+    IL_018f:  callvirt   instance string [UnityEngine]UnityEngine.TextAsset::get_text()
+    IL_0194:  call       void EntityTable::loadAimFromString(string)
+    
+    IL_0199:  nop
+    IL_019e:  call       void TDLHookClass::LoadEntityTable()
+    
+    IL_019f:  ret
+  } // end of method EntityTable::LoadTable

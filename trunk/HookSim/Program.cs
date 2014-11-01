@@ -7,20 +7,50 @@ using System.Runtime.Remoting;
 
 using UnityEngine;
 
+
 namespace ConsoleApplication1
 {
     class Program
     {
         static void Main(string[] args)
         {
-            injectCode();
+            demoMethod();
 
             Console.ReadLine();
         }
-        
-        public static void injectCode()
+
+        void a()
         {
-            Program.LoadTDLHook(new System.Object[] { "Resources" });
+            _paneState s = _paneState.MULTIPLAYER;
+            switch (s)
+            {
+                case _paneState.SPLASH:
+                    break;
+                case _paneState.NEWS:
+                    break;
+                case _paneState.SOLO:
+                    break;
+                case _paneState.MULTIPLAYER:
+                    break;
+                case _paneState.SETTINGS:
+                    break;
+                case _paneState.MODS:
+                    break;
+                default:
+                    return;
+            }
+        }
+
+
+        static GameObject prefab;
+        public static void demoMethod() {
+            prefab = LoadPrefab("candle_unlit_prefab");
+        }
+
+
+        public static void LoadEntityTable()
+        {
+            LoadTDLHook(new object[] { "loadEntityTable" });
         }
 
 
@@ -44,9 +74,28 @@ namespace ConsoleApplication1
             return method.Invoke(hookMethod, new object[] { args });
         }
 
-        public static void ShowModsMenu()
+        public static IBodyMenu ShowModsMenu()
         {
-            LoadTDLHook(new object[] { "ShowModMenu" });
+            return (IBodyMenu)LoadTDLHook(new object[] { "ShowModMenu" });
+        }
+
+        public static GameObject LoadPrefab(String preName)
+        {
+            return (GameObject)LoadTDLHook(new object[] { "LoadPrefab", preName });
         }
     }
+}
+
+
+public class IBodyMenu : MonoBehaviour
+{ }
+
+public enum _paneState
+{
+    SPLASH,
+    NEWS,
+    SOLO,
+    MULTIPLAYER,
+    SETTINGS,
+    MODS
 }

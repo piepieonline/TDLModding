@@ -205,8 +205,8 @@ namespace TDLModdingTools
 
             string classMarker = "// =============================================================";
 
-            int methodTopIndex = ilCodeViewBox.GetFirstCharIndexFromLine(ilCodeViewBox.GetLineFromCharIndex(ilCodeViewBox.Text.IndexOf(@"loadTable() cil managed")) - 1);
-            int methodBottomIndex = ilCodeViewBox.Text.IndexOf(@"// end of method EntityTable::loadTable", methodTopIndex);
+            int methodTopIndex = ilCodeViewBox.GetFirstCharIndexFromLine(ilCodeViewBox.GetLineFromCharIndex(ilCodeViewBox.Text.IndexOf(@"LoadTable() cil managed")) - 1);
+            int methodBottomIndex = ilCodeViewBox.Text.IndexOf(@"// end of method EntityTable::LoadTable", methodTopIndex);
 
             ilCodeViewBox.Text = ilCodeViewBox.Text.Insert(ilCodeViewBox.Text.LastIndexOf(classMarker) - 1, hookClassText);
 
